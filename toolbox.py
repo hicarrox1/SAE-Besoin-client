@@ -1,59 +1,84 @@
-score_data = []
-
-def get_score_data():
-    
-    if score_data == []:
-        with open("data/score.txt", "r") as file:
-                    for l in file.readlines():
-                        if l != "\n":
-                            score_data.append(l[:-1])
-    print(score_data)
-    return score_data
-
-def save_score_data():
-
-    with open("data/score.txt", "w") as file:
-        for i in get_score_data():
-            file.write(i + "\n")
-
-def afficher_score():
-
-    player_1_score = 0
-    player_2_socre = 0
-
-    
-    print(f"perso 1: {player_1_score}   player_2_socre: {player_2_socre}")
+import filler_animation
+import clear
+import math
+from data import get_select_game
 
 
-def set_score(player_1_score: int, player_2_socre: int, jeux: str):
-    new_data = []
-    for data in score_data:
-        if jeux not in data:
-            new_data.append(data)
-        else:
-            pass
+def launch_game(name: str, function):
+    # recupere les data du jeux lancer
+    game_data = get_select_game(name)
 
-def get_score(jeux: str):
+    # affiche une presentation du jeux lancer
+    present_game(
+        game_data[0],
+        game_data[2],
+        game_data[3],
+        game_data[1],
+    )
+    # calcul de la taille de la presentation
+    taille = 6 + math.ceil(len(game_data[2]) / 39) + math.ceil(len(game_data[3]) / 39)
+    # afiche un filler pendant 5s qui aura 36 case qui vont se remplir au fur a mesure des 5s avec sur le coté l'icon du jeux
+    filler_animation.launch_load_anim(5, 36, game_data[1], "▪️", "▫️")
 
-    player_1: int
-    player_2: int
+    # efface l'ecran aprés la fin du filler de 5s avec la taille de la presentation et celle du filler
+    clear.clear(taille + 2)
+    # lance la fonction de jeux
+    function()
 
-    score_data = get_score_data()
 
-    for data in score_data:
-        if jeux in data:
-            p = 0
-            cmpt = 0
-            for c in data:
-                if cmpt < 2:
-                    if c == ":":
-                        cmpt += 1
-                    p += 1
-            if "perso1" in data:
-                player_1 = int(data[p:])
-            else:
-                player_2 = int(data[p:])
+def present_game(name, description, regle, icon):
+    # affichage debut du menu pour presenter le jeux
+    print(f"\n{icon} -------------- Game ---------------{icon}")
+    print("| Bienvenue sur le jeux:                |")
 
-    return player_1,player_2
+    # centre le nom
+    affichage_text_centre_box(name)
+    # ajoute espace
+    affichage_text_centre_box("---- desc ----")
+    # affichage de la description
+    affichage_text_box(description)
+    # ajoute espace
+    affichage_text_centre_box("---- regle ----")
+    # affichage des regle
+    affichage_text_box(regle)
+    print(f"{icon} -----------------------------------{icon}\n")
 
-print(get_score("devinette"))
+
+def affichage_text_box(texte: str):
+    # affichage du texte en sautant de ligne si nécessaire
+    affichage_texte = ""
+    ligne_texte = "|"
+    for c in texte:
+        ligne_texte += c
+        if len(ligne_texte) >= 40:
+            affichage_texte += ligne_texte + "|\n"
+            ligne_texte = "|"
+    affichage_texte += ligne_texte + " " * (40 - len(ligne_texte)) + "|"
+    print(affichage_texte)
+
+
+def affichage_text_centre_box(texte: str):
+    affichage_texte = "|" + " " * (19 - int(len(texte) / 2)) + texte
+    affichage_texte = affichage_texte + " " * (40 - int(len(affichage_texte))) + "|"
+    print(affichage_texte)
+
+
+def affichage_jump_lines():
+    print("|                                       |")
+
+
+def afffichage_box(titre: str = "", texte: str = "", icon: str = "🔘"):
+    print(f"\n{icon} -------------- Game ---------------{icon}")
+
+    if titre != "":
+        affichage_text_centre_box(titre)
+    if texte != "":
+        affichage_text_box(texte)
+    else:
+        affichage_jump_lines()
+
+    print(f"{icon} -----------------------------------{icon}\n")
+
+
+def affiche_victoire(point: int):
+    afffichage_box(titre="Victoire", texte=f" Vous gagnez {point} point", icon="🟢")

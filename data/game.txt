@@ -1,0 +1,4 @@
+devinette:🆙:jeux de la devinette habituelle ...: 1. chacun sont tour 2. 1 point par victoire   3. 10 essai   4. nombre choisi entre 1 et 100
+allumetes:🔥:jeux allumetes habituelle ...: 1. chacun sont tour 2. 20 allumetes   3. enlever soit 1,2 ou 3 allumetes      4. 1 point par victoire 
+morpion:❌:jeux du morpion habituelle ...: regle
+bonus:🔴:jeux bonus habituelle ...: regle
