@@ -1,0 +1,8 @@
+perso1:devinette:5
+perso2:devinette:10
+
+perso1:allumetes:0
+perso2:allumetes:0
+
+perso1:morpion:0
+perso2:morpion:0
