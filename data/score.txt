@@ -1,9 +1,8 @@
-player1:devinette:5
-player2:devinette:10
-player1:allumetes:0
-player2:allumetes:0
-player1:morpion:10
-player2:morpion:15
-player1:bonus:10
-player2:bonus:15
-
+1:devinette:0
+2:devinette:0
+1:allumetes:0
+2:allumetes:0
+1:morpion:1
+2:morpion:1
+1:bonus:2
+2:bonus:9

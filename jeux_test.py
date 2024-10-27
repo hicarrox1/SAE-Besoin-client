@@ -7,8 +7,9 @@ import time
 def get_view_level(current_level: int, max_level: int):
     return "💣" + current_level * "🔴" + (max_level - current_level) * "🟢"
 
+print()
 
-def launch():
+def launch(joueur: int):
     max_level = 10
 
     level = 0
@@ -36,12 +37,12 @@ def launch():
     sys.stdout.write("\033[F")
     print(get_view_level(level, max_level))
 
+    clear.clear(1)
+
     if level < max_level:
-        print("\n")
-        toolbox.affiche_victoire(1)
+        toolbox.affiche_victoire(1, "hicarrox")
     else:
-        print("\n")
         toolbox.afffichage_box(titre="Defaite", texte=" Vous avez perdu", icon="⚫")
 
     time.sleep(3)
-    clear.clear(9)
+    clear.clear(5)

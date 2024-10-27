@@ -8,7 +8,7 @@ def bouger_curseur_vers_haut(n: int):
 
 def afficher_blanc(n: int):
     for _ in range(n):
-        print(" " * 160)
+        print(" " * 82)
 
 
 def clear(n: int):
