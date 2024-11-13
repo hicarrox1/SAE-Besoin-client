@@ -1,2 +1,2 @@
-player1:other
+player1:val
 player2:hicarrox

@@ -18,7 +18,7 @@ def launch_game(name: str, function):
     # calcul de la taille de la presentation
     taille = 6 + math.ceil(len(game_data[2]) / 39) + math.ceil(len(game_data[3]) / 39)
     # afiche un filler pendant 5s qui aura 36 case qui vont se remplir au fur a mesure des 5s avec sur le coté l'icon du jeux
-    filler_animation.launch_load_anim(5, 36, game_data[1], "▪️", "▫️")
+    filler_animation.launch_load_anim(2, 36, game_data[1], "▪️", "▫️")
 
     # efface l'ecran aprés la fin du filler de 5s avec la taille de la presentation et celle du filler
     clear.clear(taille + 2)
@@ -26,8 +26,10 @@ def launch_game(name: str, function):
     player2 = data.get_name(2)
     # lance la fonction de {jeux}
     afffichage_box(texte=f"Choisissez quelle joueur commence:\n1. {player1} \n2. {player2}",center_texte=True, padding= 2)
-    player_begin = int(input("Votre choix : "))
-    clear.clear(8)
+    player_begin = 0
+    while player_begin!= 1 and player_begin != 2:
+        player_begin = demander_info_entier("Votre choix : ",0)
+    clear.clear(7)
     function(player_begin)
 
 
@@ -41,7 +43,7 @@ def present_game(name, description, regle, icon):
     # ajoute espace
     affichage_text_centre_box("---- desc ----")
     # affichage de la description
-    affichage_paragraphe_box(description)
+    affichage_text_centre_box(description)
     # ajoute espace
     affichage_text_centre_box("---- regle ----")
     # affichage des regle
@@ -73,7 +75,7 @@ def affichage_text_centre_box(texte: str):
     print(affichage_texte)
 
 
-def affichage_paragraphe_centre_box(texte: str, padding: int):
+def affichage_paragraphe_centre_box(texte: str, padding: int = 4):
 
     # affichage du texte en sautant de ligne si nécessaire
     liste_ligne = []
@@ -138,3 +140,13 @@ def afficher_all_score():
        affichage_paragraphe_centre_box(f"{data.get_name(int(data_lines[0]))} : {data_lines[2]} \n",2)
 
     print(f"🟡 -----------------------------------🟡\n")
+
+
+def demander_info_entier(question: str, default):
+    choix = default
+    try:
+        choix =  int(input(question))
+        clear.clear(0)
+    except:
+        clear.clear(0)
+    return choix
