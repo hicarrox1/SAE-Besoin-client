@@ -24,7 +24,8 @@ if __name__ == "__main__":
         print("|              0.Quitter                |")
         print("🎮 -----------------------------------🎮\n")
         
-        choix = int(input("choix: "))
+        choix = toolbox.demander_info_entier("choix: ", 0)
+
         clear.clear(23)
 
         match choix:

@@ -8,7 +8,8 @@ def change_name():
     player2 = data.get_name(2)
 
     toolbox.afffichage_box(texte=f"quelle joueur veut changer de nom:\n1. {player1} \n2. {player2}",center_texte=True, padding= 2)
-    choix = int(input("Votre choix : "))
+    while choix!= 1 and choix != 2:
+        choix = toolbox.demander_info_entier("Votre choix : ",1)
     clear(7)
 
     name = input("\nnouveau nom : ")

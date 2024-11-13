@@ -72,7 +72,7 @@ def morpion(player_begin: int):
             toolbox.affiche_victoire(player_1, 1)
             data.add_score(1,data.get_name_id(current_player),"morpion")
             time.sleep(4)
-            clear.clear(17)
+            clear.clear(16)
             gagnant = True
 
         current_player = player_2 if current_player == player_1 else player_1
@@ -81,4 +81,4 @@ def morpion(player_begin: int):
         afficher_plateau(plateau)
         toolbox.afffichage_box("Match nul"," personne ne gagne de point")
         time.sleep(4)
-        clear.clear(17)
+        clear.clear(16)

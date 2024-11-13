@@ -64,11 +64,8 @@ def launch(player_begin: int):
             jeton = "🔴" if current_player == player_1 else "🟡"
             colonne = 0
             while colonne < 1 or colonne > 7 or plateau[0][colonne-1] != "🔘":
-                try:
-                    colonne = int(input(f"à votre tour {current_player} choissisez une colonne : "))
-                    clear(0)
-                except ValueError:
-                    clear(0)
+                colonne = toolbox.demander_info_entier(f"à votre tour {current_player} choissisez une colonne : ", 0)
+                    
             gagnant = add_jeton(plateau,colonne-1,jeton)
 
             clear(12) 
@@ -91,11 +88,9 @@ def launch(player_begin: int):
             time.sleep(4)
             clear(5)
 
-        print('voulez vous rejouer taper 0. Non 1. Oui')
-        choix = int(input(""))
-
+        choix = toolbox.demander_info_entier('\nvoulez vous rejouer taper 0. Non 1. Oui \n', 0)
+        clear(0)
         time.sleep(1)
-        clear(1)
 
         if choix == 1:
             game = True
