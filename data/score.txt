@@ -1,8 +1,8 @@
 1:devinette:5
-2:devinette:7
+2:devinette:8
 1:allumetes:0
 2:allumetes:0
 1:morpion:1
 2:morpion:1
-1:bonus:2
+1:bonus:3
 2:bonus:9

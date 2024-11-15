@@ -18,17 +18,21 @@ def launch_game(name: str, function):
     # calcul de la taille de la presentation
     taille = 6 + math.ceil(len(game_data[2]) / 39) + math.ceil(len(game_data[3]) / 39)
     # afiche un filler pendant 5s qui aura 36 case qui vont se remplir au fur a mesure des 5s avec sur le coté l'icon du jeux
-    filler_animation.launch_load_anim(2, 36, game_data[1], "▪️", "▫️")
+    filler_animation.launch_load_anim(10, 36, game_data[1], "▪️", "▫️")
 
     # efface l'ecran aprés la fin du filler de 5s avec la taille de la presentation et celle du filler
     clear.clear(taille + 2)
     player1 = data.get_name(1)
     player2 = data.get_name(2)
     # lance la fonction de {jeux}
-    afffichage_box(texte=f"Choisissez quelle joueur commence:\n1. {player1} \n2. {player2}",center_texte=True, padding= 2)
+    afffichage_box(
+        texte=f"Choisissez quelle joueur commence:\n1. {player1} \n2. {player2}",
+        center_texte=True,
+        padding=2,
+    )
     player_begin = 0
-    while player_begin!= 1 and player_begin != 2:
-        player_begin = demander_info_entier("Votre choix : ",0)
+    while player_begin != 1 and player_begin != 2:
+        player_begin = demander_info_entier("Votre choix : ", 0)
     clear.clear(7)
     function(player_begin)
 
@@ -47,8 +51,9 @@ def present_game(name, description, regle, icon):
     # ajoute espace
     affichage_text_centre_box("---- regle ----")
     # affichage des regle
-    affichage_paragraphe_box(regle)
+    affichage_paragraphe_centre_box(regle, padding=1)
     print(f"{icon} -----------------------------------{icon}\n")
+
 
 def affichage_paragraphe_box(texte: str):
     # affichage du texte en sautant de ligne si nécessaire
@@ -56,7 +61,7 @@ def affichage_paragraphe_box(texte: str):
     ligne_texte = "|"
     for c in texte:
         if c == "\n":
-            affichage_texte += ligne_texte + " " * (40-len(ligne_texte)) + "|\n"
+            affichage_texte += ligne_texte + " " * (40 - len(ligne_texte)) + "|\n"
             ligne_texte = "|"
         else:
             ligne_texte += c
@@ -76,7 +81,6 @@ def affichage_text_centre_box(texte: str):
 
 
 def affichage_paragraphe_centre_box(texte: str, padding: int = 4):
-
     # affichage du texte en sautant de ligne si nécessaire
     liste_ligne = []
     ligne_texte = ""
@@ -86,7 +90,7 @@ def affichage_paragraphe_centre_box(texte: str, padding: int = 4):
             ligne_texte = ""
         else:
             ligne_texte += c
-        if len(ligne_texte) >= 40-(2*padding):
+        if len(ligne_texte) >= 40 - (2 * padding):
             liste_ligne.append(ligne_texte)
             ligne_texte = ""
     if ligne_texte != "":
@@ -95,11 +99,18 @@ def affichage_paragraphe_centre_box(texte: str, padding: int = 4):
     for ligne in liste_ligne:
         affichage_text_centre_box(ligne)
 
+
 def affichage_jump_lines():
     print("|                                       |")
 
 
-def afffichage_box(titre: str = "", texte: str = "", icon: str = "🔘", center_texte: bool = False, padding = 4):
+def afffichage_box(
+    titre: str = "",
+    texte: str = "",
+    icon: str = "🔘",
+    center_texte: bool = False,
+    padding=4,
+):
     print(f"\n{icon} -------------- Game ---------------{icon}")
 
     if titre != "":
@@ -115,8 +126,10 @@ def afffichage_box(titre: str = "", texte: str = "", icon: str = "🔘", center_
     print(f"{icon} -----------------------------------{icon}\n")
 
 
-def affiche_victoire(joueur:str, point: int):
-    afffichage_box(titre="Victoire", texte=f" bravo {joueur} vous gagnez {point} point", icon="🟢")
+def affiche_victoire(joueur: str, point: int):
+    afffichage_box(
+        titre="Victoire", texte=f" bravo {joueur} vous gagnez {point} point", icon="🟢"
+    )
 
 
 def afficher_score(jeux: str):
@@ -125,28 +138,30 @@ def afficher_score(jeux: str):
     player_2_score = score[1]
     print(f"perso 1: {player_1_score}   perso 2: {player_2_score}")
 
+
 def afficher_all_score():
     score_data = data.get_score_data()
     jeux = ""
 
-    print(f"🟡 -------------- Score --------------🟡")
+    print("🟡 -------------- Score --------------🟡")
 
     for data_lines in score_data:
-       
-       if data_lines[1] != jeux:
-           affichage_text_centre_box(f"---- {data_lines[1]} ----")
-           jeux = data_lines[1]
+        if data_lines[1] != jeux:
+            affichage_text_centre_box(f"---- {data_lines[1]} ----")
+            jeux = data_lines[1]
 
-       affichage_paragraphe_centre_box(f"{data.get_name(int(data_lines[0]))} : {data_lines[2]} \n",2)
+        affichage_paragraphe_centre_box(
+            f"{data.get_name(int(data_lines[0]))} : {data_lines[2]} \n", 2
+        )
 
-    print(f"🟡 -----------------------------------🟡\n")
+    print("🟡 -----------------------------------🟡\n")
 
 
 def demander_info_entier(question: str, default):
     choix = default
     try:
-        choix =  int(input(question))
+        choix = int(input(question))
         clear.clear(0)
-    except:
+    except ValueError:
         clear.clear(0)
     return choix

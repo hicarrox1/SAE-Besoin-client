@@ -1,45 +1,21 @@
+import menu
 import toolbox
-import jeux_test
+import filler_animation
 import clear
-import jeux_morpion
-import jeux_devinette
-import jeux_bonus
-from change_name import change_name
+from constant import JOYSTICK, DONKEY_KONG
 
 if __name__ == "__main__":
-    choix: int
-    run: bool = True
+    toolbox.afffichage_box(
+        texte=JOYSTICK,
+        center_texte=True,
+        icon="🕹️",
+        padding=0,
+    )
 
-    while run:
+    filler_animation.launch_load_anim(3, 36, "🕹️", "▪️", "▫️")
 
-        print("⠀⠀⠀⠀⠀⠀⠀⠀⢀⡠⠖⠊⠉⠉⠉⠉⢉⠝⠉⠓⠦⣄⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⢀⡴⣋⠀⠀⣤⣒⡠⢀⠀⠐⠂⠀⠤⠤⠈⠓⢦⡀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⣰⢋⢬⠀⡄⣀⠤⠄⠀⠓⢧⠐⠥⢃⣴⠤⣤⠀⢀⡙⣆⠀⠀⠀⠀\n⠀⠀⠀⠀⢠⡣⢨⠁⡘⠉⠀⢀⣤⡀⠀⢸⠀⢀⡏⠑⠢⣈⠦⠃⠦⡘⡆⠀⠀⠀\n⠀⠀⠀⠀⢸⡠⠊⠀⣇⠀⠀⢿⣿⠇⠀⡼⠀⢸⡀⠠⣶⡎⠳⣸⡠⠃⡇⠀⠀⠀\n⢀⠔⠒⠢⢜⡆⡆⠀⢿⢦⣤⠖⠒⢂⣽⢁⢀⠸⣿⣦⡀⢀⡼⠁⠀⠀⡇⠒⠑⡆\n⡇⠀⠐⠰⢦⠱⡤⠀⠈⠑⠪⢭⠩⠕⢁⣾⢸⣧⠙⡯⣿⠏⠠⡌⠁⡼⢣⠁⡜⠁\n⠈⠉⠻⡜⠚⢀⡏⠢⢆⠀⠀⢠⡆⠀⠀⣀⣀⣀⡀⠀⠀⠀⠀⣼⠾⢬⣹⡾⠀⠀\n⠀⠀⠀⠉⠀⠉⠀⠀⠈⣇⠀⠀⠀⣴⡟⢣⣀⡔⡭⣳⡈⠃⣼⠀⠀⠀⣼⣧⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⠀⠀⣸⣿⣿⣿⡿⣷⣿⣿⣷⠀⡇⠀⠀⠀⠙⠊⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣠⠀⢻⠛⠭⢏⣑⣛⣙⣛⠏⠀⡇⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡏⠠⠜⠓⠉⠉⠀⠐⢒⡒⡍⠐⡇⠀⠀⠀⠀⠀⠀⠀\n⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠒⠢⠤⣀⣀⣀⣀⣘⠧⠤⠞⠁⠀⠀⠀⠀⠀⠀⠀")
-        
-        toolbox.afficher_all_score()
+    clear.clear(19)
 
-        print("🎮 -------------- Menu ---------------🎮")
-        print("|  Choisissez ce que vous voulez faire  |")
-        print("| 1. jeux devinette   2. jeux allumettes|")
-        print("| 3. jeux morpion     4. jeux bonus     |")
-        print("|           5.Changer de nom            |")
-        print("|              0.Quitter                |")
-        print("🎮 -----------------------------------🎮\n")
-        
-        choix = toolbox.demander_info_entier("choix: ", 0)
+    menu.game()
 
-        clear.clear(23)
-
-        match choix:
-            case 1:
-                toolbox.launch_game("devinette", jeux_devinette.launch)
-            case 2:
-                toolbox.launch_game("allumetes", jeux_test.launch)
-            case 3:
-                toolbox.launch_game("morpion", jeux_morpion.morpion)
-            case 4:
-                toolbox.launch_game("bonus", jeux_bonus.launch)
-            case 5:
-                change_name()
-            case 0:
-                run = False
-            case _:
-                run = False
+    print(DONKEY_KONG)

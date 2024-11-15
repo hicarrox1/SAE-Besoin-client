@@ -2,14 +2,18 @@ score_data = []
 game_data = []
 name_data = []
 
+
 def get_data_from_lines(lines: str):
-    data = []
-    current_data = ""
+    data: list = []
+    current_data: str = ""
     for c in lines:
-        current_data += c
-        if c == ":" or c == "\n":
-            data.append(current_data[:-1])
+        if c == "&":
+            current_data += "\n"
+        elif c == ":" or c == "\n":
+            data.append(current_data)
             current_data = ""
+        else:
+            current_data += c
     return data
 
 
@@ -27,7 +31,7 @@ def save_data(path: str, data: list, encoding: str = "cp1252"):
         for data_lines in data:
             for i in range(len(data_lines)):
                 file.write(data_lines[i])
-                if i != len(data_lines)-1:
+                if i != len(data_lines) - 1:
                     file.write(":")
             file.write("\n")
 
@@ -42,6 +46,7 @@ def get_game_data():
     global game_data
 
     return get_data("data/game.txt", game_data, "utf-8")
+
 
 def get_name_data():
     global name_data
@@ -74,12 +79,14 @@ def set_score(player_1_score: int, player_2_score: int, jeux: str):
             elif data_lines[0] == "2":
                 data_lines[2] = str(player_2_score)
 
-    save_data("data/score.txt",score_data)
+    save_data("data/score.txt", score_data)
+
 
 def add_score(point_gain: int, player_id: int, jeux: str):
     score = get_score(jeux)
     score[player_id] += point_gain
-    set_score(score[0],score[1],jeux)
+    set_score(score[0], score[1], jeux)
+
 
 def get_score(jeux: str):
     score_data = get_score_data()
@@ -90,12 +97,13 @@ def get_score(jeux: str):
                 player_1_score = int(data_lines[2])
             elif data_lines[0] == "2":
                 player_2_score = int(data_lines[2])
-    
+
     return [player_1_score, player_2_score]
 
 
 def get_name(name_id: int):
-    return get_name_data()[(name_id -1)][1]
+    return get_name_data()[(name_id - 1)][1]
+
 
 def get_name_id(name: str):
     name_data = get_name_data()
@@ -105,9 +113,8 @@ def get_name_id(name: str):
 
 
 def set_name(name_id: int, name):
-
-    name_data = get_name_data()[(name_id -1)]
+    name_data = get_name_data()[(name_id - 1)]
 
     name_data[1] = name
-    
-    save_data("data/player_name.txt",get_name_data(),"utf-8")
+
+    save_data("data/player_name.txt", get_name_data(), "utf-8")
