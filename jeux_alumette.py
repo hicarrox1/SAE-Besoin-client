@@ -36,7 +36,7 @@ def jeu_allumettes_2_joueurs():
         while allumettes > 0:
             afficher_allumettes(allumettes)
 
-            choix_allumettes = toolbox.demander_info_entier(
+            choix_allumettes = toolbox.ask_int(
                 f"Joueur {joueur_actuel}, combien d'allumettes souhaitez-vous retirer ? (1, 2 ou 3) : ",
                 1,
             )
@@ -55,9 +55,7 @@ def jeu_allumettes_2_joueurs():
 
             joueur_actuel = 2 if joueur_actuel == 1 else 1
 
-    choix = toolbox.demander_info_entier(
-        "\nvoulez vous rejouer taper 0. Non 1. Oui \n", 0
-    )
+    choix = toolbox.ask_int("\nvoulez vous rejouer taper 0. Non 1. Oui \n", 0)
     clear(0)
     time.sleep(1)
 

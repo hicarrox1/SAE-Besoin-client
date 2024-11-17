@@ -64,7 +64,7 @@ def launch(player_begin: int):
             jeton = "🔴" if current_player == player_1 else "🟡"
             colonne = 0
             while colonne < 1 or colonne > 7 or plateau[0][colonne - 1] != "🔘":
-                colonne = toolbox.demander_info_entier(
+                colonne = toolbox.ask_int(
                     f"à votre tour {current_player} choissisez une colonne : ", 0
                 )
 
@@ -89,9 +89,7 @@ def launch(player_begin: int):
             time.sleep(4)
             clear(5)
 
-        choix = toolbox.demander_info_entier(
-            "\nvoulez vous rejouer taper 0. Non 1. Oui \n", 0
-        )
+        choix = toolbox.ask_int("\nvoulez vous rejouer taper 0. Non 1. Oui \n", 0)
         clear(0)
         time.sleep(1)
 

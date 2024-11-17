@@ -7,7 +7,7 @@ import time
 def get_nombre_choisi(name_player_choose):
     number_choose = 0
     while number_choose < 1 or number_choose > 1000:
-        number_choose = toolbox.demander_info_entier(
+        number_choose = toolbox.ask_int(
             f"{name_player_choose} veuillez choisir un nombre entre 1 et 1000 ? ", 0
         )
     return number_choose
@@ -18,7 +18,7 @@ def deviner_nombre(number_choose, name_player_guess):
     cmpt_try = 0
     print("---------------------------")
     while number_test != number_choose:
-        number_test = toolbox.demander_info_entier(
+        number_test = toolbox.ask_int(
             f"{name_player_guess}, devinez le nombre : ", None
         )
         if number_test is not None:
@@ -69,9 +69,7 @@ def launch(player_begin: int):
             time.sleep(2)
             clear(4)
 
-        choix = toolbox.demander_info_entier(
-            "voulez vous rejouer taper 0. Non 1. Oui \n", 0
-        )
+        choix = toolbox.ask_int("voulez vous rejouer taper 0. Non 1. Oui \n", 0)
         clear(0)
         time.sleep(1)
 

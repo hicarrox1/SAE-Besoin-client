@@ -1,10 +1,9 @@
 import toolbox
-import jeux_test
 import clear
 import jeux_morpion
 import jeux_devinette
 import jeux_bonus
-from change_icon import change_icon
+import jeux_alumette
 
 
 def game():
@@ -12,31 +11,31 @@ def game():
     run: bool = True
 
     while run:
-        toolbox.afficher_all_score()
+        toolbox.display_box(
+            "",
+            "Choisissez ce que vous voulez faire\n1. devinette   2. allumettes\n3. morpion     4. bonus     \n5.Changer d'icon\n6. afficher les scores\n0.Quitter",
+            icon="🎮",
+            padding=1,
+            center_texte=True,
+        )
 
-        print("🎮 -------------- Menu ---------------🎮")
-        print("|  Choisissez ce que vous voulez faire  |")
-        print("| 1. jeux devinette   2. jeux allumettes|")
-        print("| 3. jeux morpion     4. jeux bonus     |")
-        print("|           5.Changer d'icon            |")
-        print("|              0.Quitter                |")
-        print("🎮 -----------------------------------🎮\n")
+        choix = toolbox.ask_int("choix: ", 0)
 
-        choix = toolbox.demander_info_entier("choix: ", 0)
-
-        clear.clear(23)
+        clear.clear_terminal()
 
         match choix:
             case 1:
                 toolbox.launch_game("devinette", jeux_devinette.launch)
             case 2:
-                toolbox.launch_game("allumetes", jeux_test.launch)
+                toolbox.launch_game("allumetes", jeux_alumette.jeu_allumettes_2_joueurs)
             case 3:
                 toolbox.launch_game("morpion", jeux_morpion.morpion)
             case 4:
                 toolbox.launch_game("bonus", jeux_bonus.launch)
             case 5:
-                change_icon()
+                toolbox.change_icon()
+            case 6:
+                toolbox.game_ranking()
             case 0:
                 run = False
             case _:
