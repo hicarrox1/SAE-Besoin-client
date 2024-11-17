@@ -12,7 +12,7 @@ def afficher_plateau(plateau):
             plateau_affichage += "--- --- ---\n"
     plateau_affichage += "\n"
     
-    toolbox.afffichage_box("plateau",plateau_affichage, center_texte=True)
+    toolbox.display_box("plateau",plateau_affichage, center_texte=True)
 
 
 def verifier_gagnant(plateau, joueur):
@@ -69,7 +69,7 @@ def morpion(player_begin: int):
 
         if verifier_gagnant(plateau, 'X' if current_player == player_1 else "O"):
             afficher_plateau(plateau)
-            toolbox.affiche_victoire(player_1, 1)
+            toolbox.display_victory(player_1, 1)
             data.add_score(1,data.get_name_id(current_player),"morpion")
             time.sleep(4)
             clear.clear(16)
@@ -79,6 +79,6 @@ def morpion(player_begin: int):
     
     if not gagnant:
         afficher_plateau(plateau)
-        toolbox.afffichage_box("Match nul"," personne ne gagne de point")
+        toolbox.display_box("Match nul"," personne ne gagne de point")
         time.sleep(4)
         clear.clear(16)

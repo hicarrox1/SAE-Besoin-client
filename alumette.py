@@ -5,7 +5,7 @@ import time
 
 
 def afficher_allumettes(allumettes):
-    toolbox.afffichage_box(
+    toolbox.display_box(
         texte=f"Nombre d'allumettes restantes : {allumettes}\n"
         + "Allumettes : "
         + "|" * allumettes,
@@ -24,7 +24,7 @@ def jeu_allumettes_2_joueurs():
         print("Vous pouvez retirer entre 1 et 3 allumettes à chaque tour.")
         print("Le joueur qui prend la dernière allumette perd la partie.\n")
 
-        toolbox.afffichage_box(
+        toolbox.display_box(
             texte="Qui commence ? \n'1': Joueur 1\n'2': Joueur 2\n'A': aléatoire",
             center_texte=True,
         )

@@ -4,7 +4,7 @@ import clear
 import jeux_morpion
 import jeux_devinette
 import jeux_bonus
-from change_name import change_name
+from change_icon import change_icon
 
 
 def game():
@@ -18,7 +18,7 @@ def game():
         print("|  Choisissez ce que vous voulez faire  |")
         print("| 1. jeux devinette   2. jeux allumettes|")
         print("| 3. jeux morpion     4. jeux bonus     |")
-        print("|           5.Changer de nom            |")
+        print("|           5.Changer d'icon            |")
         print("|              0.Quitter                |")
         print("🎮 -----------------------------------🎮\n")
 
@@ -36,7 +36,7 @@ def game():
             case 4:
                 toolbox.launch_game("bonus", jeux_bonus.launch)
             case 5:
-                change_name()
+                change_icon()
             case 0:
                 run = False
             case _:

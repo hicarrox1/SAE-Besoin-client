@@ -5,7 +5,7 @@ import clear
 from constant import JOYSTICK, DONKEY_KONG
 
 if __name__ == "__main__":
-    toolbox.afffichage_box(
+    toolbox.display_box(
         texte=JOYSTICK,
         center_texte=True,
         icon="🕹️",

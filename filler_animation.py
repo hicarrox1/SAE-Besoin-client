@@ -1,6 +1,5 @@
 import time
 
-
 def set_level(
     current_level: int, max_level: int, icon: str, filler_icon: str, base_icon: str
 ):

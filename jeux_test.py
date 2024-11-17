@@ -40,9 +40,9 @@ def launch(joueur: int):
     clear.clear(1)
 
     if level < max_level:
-        toolbox.affiche_victoire(1, "hicarrox")
+        toolbox.display_victory(1, "hicarrox")
     else:
-        toolbox.afffichage_box(titre="Defaite", texte=" Vous avez perdu", icon="⚫")
+        toolbox.display_box(titre="Defaite", texte=" Vous avez perdu", icon="⚫")
 
     time.sleep(3)
     clear.clear(5)

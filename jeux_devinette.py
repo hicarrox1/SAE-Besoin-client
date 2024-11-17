@@ -60,11 +60,11 @@ def launch(player_begin: int):
             name_player_win = player_2
 
         if player_1_cmpt == player_2_cmpt:
-            toolbox.afffichage_box("Match nul", " personne ne gagne de point")
+            toolbox.display_box("Match nul", " personne ne gagne de point")
             time.sleep(4)
             clear(4)
         else:
-            toolbox.affiche_victoire(name_player_win, 1)
+            toolbox.display_victory(name_player_win, 1)
             data.add_score(1, data.get_name_id(name_player_win), "devinette")
             time.sleep(2)
             clear(4)

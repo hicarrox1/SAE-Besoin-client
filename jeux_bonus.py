@@ -75,7 +75,7 @@ def launch(player_begin: int):
 
             if gagnant:
                 clear(12)
-                toolbox.affiche_victoire(current_player, 1)
+                toolbox.display_victory(current_player, 1)
                 data.add_score(1, data.get_name_id(current_player), "bonus")
                 time.sleep(4)
                 clear(5)
@@ -85,7 +85,7 @@ def launch(player_begin: int):
 
         if not gagnant:
             clear(12)
-            toolbox.afffichage_box("Match nul", " personne ne gagne de point")
+            toolbox.display_box("Match nul", " personne ne gagne de point")
             time.sleep(4)
             clear(5)
 

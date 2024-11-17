@@ -1,4 +1,4 @@
-devinette:🆙:jeux de la devinette habituelle ...:chacun sont tour&1 point par victoire& 10 essai& nombre choisi entre 1 et 1000
-allumetes:🔥:Bienvenue au jeu des allumettes:Il y a 21 allumettes au départ&Vous pouvez retirer 1, 2 ou 3&allumettes&Le joueur qui enleve la dernière&allumette perd&le gagnant gagne 1 point 
-morpion:❌:jeux du morpion habituelle ...: regle
-bonus:🔴:jeux bonus habituelle ...: regle
+0:devinette:🆙:jeux de la devinette habituelle ...:chacun sont tour&1 point par victoire& 10 essai& nombre choisi entre 1 et 1000
+1:allumetes:🔥:Bienvenue au jeu des allumettes:Il y a 21 allumettes au départ&Vous pouvez retirer 1, 2 ou 3&allumettes&Le joueur qui enleve la dernière&allumette perd&le gagnant gagne 1 point 
+2:morpion:❌:jeux du morpion habituelle ...: regle
+3:bonus:🔴:jeux bonus habituelle ...: regle

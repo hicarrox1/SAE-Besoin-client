@@ -1,2 +1,6 @@
-player1:val
-player2:hicarrox
+0:val:🐘
+1:hicarrox:🐵
+2:mario:🐙
+3:test:🌷
+4:sonic:🌌
+5:luigi:🌵

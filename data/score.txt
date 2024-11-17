@@ -1,8 +1,6 @@
-1:devinette:5
-2:devinette:8
-1:allumetes:0
-2:allumetes:0
-1:morpion:1
-2:morpion:1
-1:bonus:3
-2:bonus:9
+0:10:4:0:9
+1:20:30:0:12
+2:40:5:10:70
+3:40:0:3:3
+4:10:12:5:12
+5:15:0:0:60
