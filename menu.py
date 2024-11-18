@@ -27,7 +27,7 @@ def game():
             case 1:
                 toolbox.launch_game("devinette", jeux_devinette.launch)
             case 2:
-                toolbox.launch_game("allumetes", jeux_alumette.jeu_allumettes_2_joueurs)
+                toolbox.launch_game("allumetes", jeux_alumette.jeu_allumettes)
             case 3:
                 toolbox.launch_game("morpion", jeux_morpion.morpion)
             case 4:

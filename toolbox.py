@@ -72,7 +72,7 @@ def display_paragraph(
     mot: str = ""
     for c in text:
         if c == " " or c == "\n":
-            if text_line == "" and len(mot)>1:
+            if text_line == "" and len(mot) > 1:
                 text_line += mot
             else:
                 text_line += " " + mot
@@ -196,6 +196,7 @@ def display_game_ranking(id: int, n: int):
 # GAME TOOLS
 def launch_game(game_name: str, function):
     players: list = []
+    choice: int = 1
 
     # recupere les data du jeux lancer
     game_data: list = data.get_game_line(game_name)
@@ -215,7 +216,11 @@ def launch_game(game_name: str, function):
     clear_terminal()
     # lance la fonction de {jeux}
     players = who_played()
-    function(players)
+
+    while choice == 1:
+        function(players)
+        choice = ask_int("\nvoulez vous rejouer taper 0. Non 1. Oui \n", 0)
+        clear_terminal()
 
 
 def who_played() -> list:
@@ -242,7 +247,11 @@ def who_played() -> list:
         elif choice == 1 or choice == 2:
             while pseudo == "":
                 pseudo = ask_str("quelle est votre pseudo: ", "")
-                if len(pseudo) >= 8:
+                if (
+                    len(pseudo) >= 14
+                    or (choice == 1 and pseudo == player_2_name)
+                    or (choice == 2 and pseudo == player_1_name)
+                ):
                     pseudo = ""
             if choice == 1:
                 player_1_name = pseudo
@@ -251,10 +260,10 @@ def who_played() -> list:
         clear_terminal()
 
     if data.get_player_id(player_1_name) == -1:
-        data.add_player(player_1_name, "🧟")
+        data.add_player(player_1_name, "🌵")
 
     if data.get_player_id(player_2_name) == -1:
-        data.add_player(player_2_name, "🧟")
+        data.add_player(player_2_name, "🌵")
 
     return [player_1_name, player_2_name]
 

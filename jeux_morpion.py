@@ -3,16 +3,16 @@ import data
 import time
 import toolbox
 
+
 def afficher_plateau(plateau):
-    
     plateau_affichage = ""
     for i in range(len(plateau)):
-        plateau_affichage += " | ".join(plateau[i])+"\n"
-        if i != len(plateau)-1:
+        plateau_affichage += " | ".join(plateau[i]) + "\n"
+        if i != len(plateau) - 1:
             plateau_affichage += "--- --- ---\n"
     plateau_affichage += "\n"
-    
-    toolbox.display_box("plateau",plateau_affichage, center_texte=True)
+
+    toolbox.display_box("plateau", plateau_affichage, center_texte=True)
 
 
 def verifier_gagnant(plateau, joueur):
@@ -27,6 +27,7 @@ def verifier_gagnant(plateau, joueur):
         return True
     return False
 
+
 def morpion(players: list):
     print("")
     plateau = [[" " for _ in range(3)] for _ in range(3)]
@@ -35,49 +36,43 @@ def morpion(players: list):
     current_player = player_1
     verif = True
     nb_tour = 1
-    gagnant= False
+    gagnant = False
 
     while nb_tour <= 9 and not gagnant:
         nb_tour += 1
         afficher_plateau(plateau)
-        print(f"\n{current_player}, à vous de jouer !")
+
         verif = True
         while verif:
-            try:
-                ligne = int(input("Entrez le numéro de ligne (1-3) : ")) - 1
-                colonne = int(input("Entrez le numéro de colonne (1-3) : ")) - 1
-                if ligne in range(3) and colonne in range(3):
-                    if plateau[ligne][colonne] == " ":
-                        clear.clear_terminal()
-                        verif = False
-                    else:
-                        clear.clear(2)
-                        print("Cette case est déjà prise, réessayez.")
-                else:
-                    clear.clear(2)
-                    print("Les numéros doivent être entre 1 et 3.")
-            except ValueError:
-                print("Veuillez entrer des nombres valides.")
+            ligne = 0
+            while ligne != 1 and ligne != 2 and ligne != 3:
+                ligne = int(toolbox.ask_int("Entrez le numéro de ligne (1-3) : ", 0))
+            colonne = 0
+            while colonne != 1 and colonne != 2 and colonne != 3:
+                colonne = int(
+                    toolbox.ask_int("Entrez le numéro de colonne (1-3) : ", 0)
+                )
+            ligne -= 1
+            colonne -= 1
 
+            if plateau[ligne][colonne] == " ":
+                clear.clear_terminal()
+                verif = False
 
-        plateau[ligne][colonne] = 'X' if current_player == player_1 else "O"
+        plateau[ligne][colonne] = "X" if current_player == player_1 else "O"
 
-
-        if verifier_gagnant(plateau, 'X' if current_player == player_1 else "O"):
+        if verifier_gagnant(plateau, "X" if current_player == player_1 else "O"):
             afficher_plateau(plateau)
             toolbox.display_victory(player_1, 1)
-            data.add_score_point(current_player,"morpion",1)
+            data.add_score_point(current_player, "morpion", 1)
             time.sleep(4)
             clear.clear_terminal()
             gagnant = True
 
         current_player = player_2 if current_player == player_1 else player_1
-    
+
     if not gagnant:
         afficher_plateau(plateau)
-        toolbox.display_box("Match nul"," personne ne gagne de point")
+        toolbox.display_box("Match nul", " personne ne gagne de point")
         time.sleep(4)
         clear.clear_terminal()
-
-
-morpion(["mario","luigi"])

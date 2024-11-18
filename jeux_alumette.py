@@ -1,65 +1,54 @@
-import random
 import toolbox
-from clear import clear
+from clear import clear, clear_terminal, special_print
 import time
+import data
 
 
 def afficher_allumettes(allumettes):
     toolbox.display_box(
         texte=f"Nombre d'allumettes restantes : {allumettes}\n"
-        + "Allumettes : "
-        + "|" * allumettes,
+        + "Allumettes : \n"
+        + "🔥" * allumettes,
         padding=1,
         center_texte=True,
     )
 
 
-def jeu_allumettes_2_joueurs():
-    game: bool = True
+def jeu_allumettes(players: list):
+    current_player: str
+    other_player: str
+    matches_count: int = 21
+    choice: int
+    temp: str
 
-    while game:
-        allumettes = 21
-        print("Bienvenue au jeu des allumettes pour 2 joueurs !")
-        print("Il y a 21 allumettes au départ.")
-        print("Vous pouvez retirer entre 1 et 3 allumettes à chaque tour.")
-        print("Le joueur qui prend la dernière allumette perd la partie.\n")
+    current_player = players[0]
+    other_player = players[1]
 
-        toolbox.display_box(
-            texte="Qui commence ? \n'1': Joueur 1\n'2': Joueur 2\n'A': aléatoire",
-            center_texte=True,
-        )
+    while matches_count > 0:
+        afficher_allumettes(matches_count)
 
-        choix = input("").strip()
-        joueur_actuel = int(choix) if choix in [1, 2] else random.choice([1, 2])
-        print(f"C'est le Joueur {joueur_actuel} qui commence.\n")
+        choice = 0
+        while choice != 1 and choice != 2 and choice != 3:
+            choice = toolbox.ask_int(
+                f"Joueur {current_player}, combien d'allumettes souhaitez-vous retirer ? (1, 2 ou 3) : ",
+                0,
+            )
+            clear(0)
 
-        while allumettes > 0:
-            afficher_allumettes(allumettes)
+        matches_count -= choice
 
-            choix_allumettes = toolbox.ask_int(
-                f"Joueur {joueur_actuel}, combien d'allumettes souhaitez-vous retirer ? (1, 2 ou 3) : ",
-                1,
+        if matches_count <= 0:
+            special_print(
+                f"Le joueur {current_player} a pris la dernière allumette. Le joueur {other_player} a perdu !"
             )
 
-            if 1 <= choix_allumettes <= 3 and choix_allumettes <= allumettes:
-                allumettes -= choix_allumettes
-            else:
-                print("Choix invalide, essayez à nouveau.")
-                continue
+        temp = current_player
+        current_player = other_player
+        other_player = temp
 
-            if allumettes == 0:
-                print(
-                    f"Le joueur {joueur_actuel} a pris la dernière allumette. Le joueur {joueur_actuel} a perdu !"
-                )
-                break
+        clear_terminal()
 
-            joueur_actuel = 2 if joueur_actuel == 1 else 1
-
-    choix = toolbox.ask_int("\nvoulez vous rejouer taper 0. Non 1. Oui \n", 0)
-    clear(0)
-    time.sleep(1)
-
-    if choix == 1:
-        game = True
-    else:
-        game = False
+    toolbox.display_victory(current_player, 3)
+    data.add_score_point(current_player, "allumetes", 3)
+    time.sleep(4)
+    clear_terminal()
