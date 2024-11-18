@@ -15,7 +15,7 @@ if __name__ == "__main__":
     filler_animation.slider(3, 36, "🕹️", "▪️", "▫️")
     clear.clear(1)
     clear.clear_terminal()
-
+    
     menu.game()
 
     print(DONKEY_KONG)

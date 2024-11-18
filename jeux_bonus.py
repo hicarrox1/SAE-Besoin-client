@@ -1,6 +1,6 @@
 import toolbox
 import data
-from clear import clear
+from clear import clear,clear_terminal
 import time
 
 
@@ -9,48 +9,53 @@ def afficher_plateau(plateau):
     for i in range(len(plateau)):
         plateau_affichage += " | ".join(plateau[i]) + "\n"
         if i != len(plateau) - 1:
-            plateau_affichage += "---  " * 7 + "\n"
+            plateau_affichage += "-----" * 7 + "\n"
     plateau_affichage += "\n"
 
-    print(plateau_affichage)
-
+    toolbox.display_box(titre=" ",texte=plateau_affichage,center_texte=True, padding=1)
 
 def add_jeton(plateau: list, colonne: int, jeton: str):
+    ligne: int
+
     for i in range(len(plateau)):
         if plateau[i][colonne] == "🔘":
             ligne = i
     plateau[ligne][colonne] = jeton
-
-    if verif_gagnant(plateau, jeton, colonne, ligne):
+    if check_if_win(plateau,jeton,[ligne,colonne]):
         return True
     return False
 
 
-def verif_gagnant(plateau: list, jeton: str, colonne: int, ligne: int):
-    for lig in range(-1, 2):
-        for col in range(-1, 2):
-            if lig == 0 and col == 0:
-                pass
-            else:
-                cmpt = 1
-                for i in range(1, 4):
-                    try:
-                        if plateau[ligne + (i * lig)][colonne + (i * col)] == jeton:
-                            cmpt += 1
-                        if cmpt == 4:
-                            return True
+def check_if_win(plateau: list, jeton:str, pos: list) -> bool:
+    total_voisins = 1
 
-                    except ValueError:
-                        pass
+    directions = [[(0, 1), (0, -1)],[(1, 0), (-1, 0)],[(1, 1), (-1, -1)],[(1, -1), (-1, 1)]]
+    dx = 0
+    dy = 0
+
+    for direction in directions:
+        for dx, dy in direction:
+            current_pos = [pos[0],pos[1]]
+            
+            try:
+                while plateau[current_pos[0] + dx][current_pos[1] + dy] == jeton and (current_pos[0]+ dx) >= 0 and (current_pos[1]+dy) >= 0:
+                    total_voisins += 1
+                    current_pos[0] = current_pos[0] + dx
+                    current_pos[1] = current_pos[1] + dy
+            except:
+                pass
+        if total_voisins >= 4:
+            return True
+        total_voisins = 1
+
     return False
 
-
-def launch(player_begin: int):
+def launch(players: list):
     game = True
     choix: int
 
-    player_1 = data.get_name(player_begin)
-    player_2 = data.get_name((player_begin + 1) % 2)
+    player_1 = players[0]
+    player_2 = players[1]
     current_player = player_1
 
     while game:
@@ -67,30 +72,28 @@ def launch(player_begin: int):
                 colonne = toolbox.ask_int(
                     f"à votre tour {current_player} choissisez une colonne : ", 0
                 )
-
+            
             gagnant = add_jeton(plateau, colonne - 1, jeton)
-
-            clear(12)
+            clear_terminal()
             afficher_plateau(plateau)
 
             if gagnant:
-                clear(12)
                 toolbox.display_victory(current_player, 1)
-                data.add_score(1, data.get_name_id(current_player), "bonus")
+                data.add_score_point(current_player,"bonus",1)
                 time.sleep(4)
-                clear(5)
+                clear_terminal()
 
             else:
                 current_player = player_2 if current_player == player_1 else player_1
 
         if not gagnant:
-            clear(12)
+            clear_terminal()
             toolbox.display_box("Match nul", " personne ne gagne de point")
             time.sleep(4)
-            clear(5)
+            clear_terminal()
 
         choix = toolbox.ask_int("\nvoulez vous rejouer taper 0. Non 1. Oui \n", 0)
-        clear(0)
+        clear_terminal()
         time.sleep(1)
 
         if choix == 1:

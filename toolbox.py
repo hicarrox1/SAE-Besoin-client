@@ -72,7 +72,7 @@ def display_paragraph(
     mot: str = ""
     for c in text:
         if c == " " or c == "\n":
-            if text_line == "":
+            if text_line == "" and len(mot)>1:
                 text_line += mot
             else:
                 text_line += " " + mot

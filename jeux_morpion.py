@@ -27,11 +27,11 @@ def verifier_gagnant(plateau, joueur):
         return True
     return False
 
-def morpion(player_begin: int):
+def morpion(players: list):
     print("")
     plateau = [[" " for _ in range(3)] for _ in range(3)]
-    player_1 = data.get_name(player_begin)
-    player_2 = data.get_name((player_begin+1)%2)
+    player_1 = players[0]
+    player_2 = players[1]
     current_player = player_1
     verif = True
     nb_tour = 1
@@ -43,15 +43,12 @@ def morpion(player_begin: int):
         print(f"\n{current_player}, à vous de jouer !")
         verif = True
         while verif:
-            taille = 1
             try:
                 ligne = int(input("Entrez le numéro de ligne (1-3) : ")) - 1
-                taille += 1
                 colonne = int(input("Entrez le numéro de colonne (1-3) : ")) - 1
-                taille += 1
                 if ligne in range(3) and colonne in range(3):
                     if plateau[ligne][colonne] == " ":
-                        clear.clear(14)
+                        clear.clear_terminal()
                         verif = False
                     else:
                         clear.clear(2)
@@ -60,7 +57,6 @@ def morpion(player_begin: int):
                     clear.clear(2)
                     print("Les numéros doivent être entre 1 et 3.")
             except ValueError:
-                clear.clear(taille)
                 print("Veuillez entrer des nombres valides.")
 
 
@@ -70,9 +66,9 @@ def morpion(player_begin: int):
         if verifier_gagnant(plateau, 'X' if current_player == player_1 else "O"):
             afficher_plateau(plateau)
             toolbox.display_victory(player_1, 1)
-            data.add_score(1,data.get_name_id(current_player),"morpion")
+            data.add_score_point(current_player,"morpion",1)
             time.sleep(4)
-            clear.clear(16)
+            clear.clear_terminal()
             gagnant = True
 
         current_player = player_2 if current_player == player_1 else player_1
@@ -81,4 +77,7 @@ def morpion(player_begin: int):
         afficher_plateau(plateau)
         toolbox.display_box("Match nul"," personne ne gagne de point")
         time.sleep(4)
-        clear.clear(16)
+        clear.clear_terminal()
+
+
+morpion(["mario","luigi"])
