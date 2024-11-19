@@ -12,9 +12,7 @@ def afficher_plateau(plateau):
             plateau_affichage += "-----" * 7 + "\n"
     plateau_affichage += "\n"
 
-    toolbox.display_box(
-        titre=" ", texte=plateau_affichage, center_texte=True, padding=1
-    )
+    toolbox.display_box(titre=" ", text=plateau_affichage, center_texte=True, padding=1)
 
 
 def add_jeton(plateau: list, colonne: int, jeton: str):

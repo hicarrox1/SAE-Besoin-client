@@ -33,6 +33,8 @@ def clear_one_line():
     global lenght
     clear(1)
     lenght -= 2
+    if lenght <= 0:
+        lenght = 0
 
 
 def special_print(text: str, end="\n"):

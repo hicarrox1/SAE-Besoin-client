@@ -6,7 +6,7 @@ import data
 
 def afficher_allumettes(allumettes):
     toolbox.display_box(
-        texte=f"Nombre d'allumettes restantes : {allumettes}\n"
+        text=f"Nombre d'allumettes restantes : {allumettes}\n"
         + "Allumettes : \n"
         + "🔥" * allumettes,
         padding=1,

@@ -5,3 +5,4 @@
 4:sonic:🌞
 5:luigi:🌵
 6:zombie:🦖
+7:lulu:🐵

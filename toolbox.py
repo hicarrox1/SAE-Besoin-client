@@ -111,7 +111,7 @@ def display_paragraph(
 
 def display_box(
     titre: str = "",
-    texte: str = "",
+    text: str = "",
     icon: str = "🔘",
     center_texte: bool = False,
     padding=4,
@@ -120,8 +120,8 @@ def display_box(
 
     if titre != "":
         display_center_text(titre)
-    if texte != "":
-        display_paragraph(texte, padding, center_texte)
+    if text != "":
+        display_paragraph(text, padding, center_texte)
     else:
         display_line_jump()
 
@@ -152,7 +152,7 @@ def display_game_presentation(name: str, description: str, regle: str, icon: str
 def display_victory(player: str, point: int):
     display_box(
         titre="Victoire",
-        texte=f"bravo {player} vous gagnez {point} point",
+        text=f"bravo {player} vous gagnez {point} point",
         icon="🟢",
         padding=2,
         center_texte=True,
@@ -164,7 +164,7 @@ def display_best_player(game_name: str):
     player_name: str = data.get_player_name(best_player[0][0])
     display_box(
         titre=f" meilleur joueur de {game_name}",
-        texte=f" {data.get_player_icon(player_name)} {player_name} avec {best_player[0][1]} point",
+        text=f" {data.get_player_icon(player_name)} {player_name} avec {best_player[0][1]} point",
         icon="🟡",
         padding=2,
         center_texte=True,
@@ -219,7 +219,8 @@ def launch_game(game_name: str, function):
 
     while choice == 1:
         function(players)
-        choice = ask_int("\nvoulez vous rejouer taper 0. Non 1. Oui \n", 0)
+        display_box(text="voulez vous rejouer taper \n0. Non 1. Oui", center_texte=True)
+        choice = ask_int("-> ", 0)
         clear_terminal()
 
 

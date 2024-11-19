@@ -7,7 +7,7 @@ import time
 
 if __name__ == "__main__":
     toolbox.display_box(
-        texte=JOYSTICK,
+        text=JOYSTICK,
         center_texte=True,
         icon="🕹️ ",
         padding=0,
