@@ -11,7 +11,7 @@ def get_nombre_choisi(name_player_choose):
         center_texte=True,
     )
     while number_choose < 1 or number_choose > 1000:
-        number_choose = toolbox.ask_int("-> ", 0)
+        number_choose = toolbox.ask_int("-> ", 0, hide=True)
     clear_terminal()
     return number_choose
 

@@ -37,7 +37,7 @@ def clear_one_line():
         lenght = 0
 
 
-def special_print(text: str, end="\n"):
+def special_print(text: str, end="\n", flush=False):
     global lenght
     add_lenght: int = 1
     # width: int = os.get_terminal_size().columns + math.ceil(len(text)/width)-1
@@ -45,7 +45,7 @@ def special_print(text: str, end="\n"):
         if c == "\n":
             add_lenght += 1
     lenght += add_lenght
-    print(text, end=end)
+    print(text, end=end, flush=flush)
 
 
 def special_input(text: str):
