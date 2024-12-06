@@ -4,162 +4,17 @@ from clear import (
     clear,
     clear_terminal,
     special_print,
-    special_input,
-    clear_one_line,
 )
-import unicodedata
-import sys
-import msvcrt
-
-
-# INPUT
-def ask_int(question: str, default: int, hide: bool = False):
-    choice: int = default
-    try:
-        if hide:
-            choice = int(hide_input(question))
-        else:
-            choice = int(special_input(question))
-        clear_one_line()
-    except ValueError:
-        clear_one_line()
-    return choice
-
-
-def ask_str(question: str, default: str, hide: bool = False):
-    choice: str = default
-    try:
-        if hide:
-            choice = hide_input(question)
-        else:
-            choice = special_input(question)
-        clear_one_line()
-    except ValueError:
-        clear_one_line()
-    return choice
-
-
-def hide_input(text: str):
-    special_print(text, end="", flush=True)
-    user_inputs: str = ""
-    check: bool = True
-    while check:
-        char = msvcrt.getch()
-        if char == b"\r":  # Entrée
-            check = False
-        elif char == b"\x08":  # Retour arrière
-            if len(user_inputs) > 0:
-                user_inputs = user_inputs[:-1]
-                sys.stdout.write("\b \b")  # Efface le dernier caractère
-                sys.stdout.flush()
-        else:
-            user_inputs += char.decode()
-            sys.stdout.write("*")
-            sys.stdout.flush()
-    special_print("")
-    return user_inputs
-
-
-# DISPLAY
-
-# utility
-
-
-def char_width(char):
-    if unicodedata.east_asian_width(char) in ["W", "F"]:
-        return 2
-    else:
-        return 1
-
-
-def string_width(s):
-    return sum(char_width(char) for char in s)
-
-
-def display_text(text: str, padding: int):
-    text_display = "|" + " " * padding + text
-    text_display = text_display + " " * (40 - int(string_width(text_display))) + "|"
-    special_print(text_display)
-
-
-def display_center_text(text: str):
-    text_display: str = "|" + " " * (19 - int(string_width(text) / 2)) + text
-    text_display = text_display + " " * (40 - int(string_width(text_display))) + "|"
-    special_print(text_display)
-
-
-def display_line_jump():
-    special_print("|                                       |")
-
-
-def display_paragraph(
-    text: str, padding: int = 4, center: bool = False, jump_line: bool = False
-):
-    # affichage du texte en sautant de ligne si nécessaire
-    all_text_line: list = []
-    text_line: str = ""
-    mot: str = ""
-    for c in text:
-        if c == " " or c == "\n":
-            if text_line == "" and len(mot) > 1:
-                text_line += mot
-            else:
-                text_line += " " + mot
-            mot = ""
-            if c == "\n":
-                all_text_line.append(text_line)
-                text_line = ""
-        else:
-            mot += c
-            if string_width(mot) >= 39 - (2 * padding):
-                if text_line != "":
-                    all_text_line.append(text_line)
-                all_text_line.append(mot)
-                mot = ""
-                text_line = ""
-        if (string_width(text_line) + string_width(mot)) >= 39 - (2 * padding):
-            all_text_line.append(text_line)
-            text_line = ""
-
-    if mot != "":
-        if text_line == "":
-            text_line += mot
-        else:
-            text_line += " " + mot
-    if text_line != "":
-        all_text_line.append(text_line)
-
-    for ligne in all_text_line:
-        if center:
-            display_center_text(ligne)
-        else:
-            display_text(ligne, padding)
-        if jump_line:
-            display_line_jump()
-
-
-def display_box(
-    titre: str = "",
-    text: str = "",
-    icon: str = "🔘",
-    center_texte: bool = False,
-    padding=4,
-):
-    special_print(f"\n{icon} -------------- Game ---------------{icon}")
-
-    if titre != "":
-        display_center_text(titre)
-    if text != "":
-        display_paragraph(text, padding, center_texte)
-    else:
-        display_line_jump()
-
-    special_print(f"{icon} -----------------------------------{icon}\n")
+from display_tool import (
+    display_center_text,
+    display_box,
+    display_paragraph,
+    display_line_jump,
+)
+from input_tool import ask_int, ask_str
 
 
 # prefab
-
-
 def display_game_presentation(name: str, description: str, regle: str, icon: str):
     # affichage debut du menu pour presenter le jeux
     special_print(f"\n{icon} -------------- Game ---------------{icon}")
@@ -253,6 +108,7 @@ def launch_game(game_name: str, function):
         clear_terminal()
 
 
+# tools
 def who_played() -> list:
     player_1_name: str = "..."
     player_2_name: str = "..."
@@ -383,3 +239,23 @@ def game_ranking():
             display = False
 
         clear_terminal()
+
+
+def manage_score():
+    choice: int = 0
+
+    while choice == 0:
+        display_box(
+            "",
+            "que voulez vous faire \n 1. afficher le classement 2. afficher votre score",
+            center_texte=True,
+            padding=2,
+            icon="📈",
+        )
+
+        choice = ask_int("-> ", 0)
+
+        if choice == 1:
+            game_ranking()
+        elif choice == 2:
+            pass
