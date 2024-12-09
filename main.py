@@ -2,10 +2,13 @@ import menu
 import toolbox
 import filler_animation
 import clear
-from constant import JOYSTICK, DONKEY_KONG
+from constant import JOYSTICK, DONKEY_KONG, BEGIN_MESSAGE
 import time
 
 if __name__ == "__main__":
+
+    toolbox.special_print(f"\n{BEGIN_MESSAGE}")
+
     toolbox.display_box(
         text=JOYSTICK,
         center_texte=True,

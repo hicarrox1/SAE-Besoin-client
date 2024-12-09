@@ -35,7 +35,7 @@ def game():
             case 5:
                 toolbox.change_icon()
             case 6:
-                toolbox.game_ranking()
+                toolbox.manage_score()
             case 0:
                 run = False
             case _:

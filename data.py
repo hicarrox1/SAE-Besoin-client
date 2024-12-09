@@ -159,6 +159,11 @@ def get_top_score(game_name: str, n: int):
         players_score.append([line[0], line[game_id + 1]])
     return players_score
 
+def get_player_scores(player_id: int) -> list:
+    
+    player_scores: list = find_data_line(str(player_id),0,get_score_data())
+    
+    return player_scores[1:]
 
 # set special data
 def add_score_line(player_index: int):
