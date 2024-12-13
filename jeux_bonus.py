@@ -1,4 +1,4 @@
-import toolbox
+import game_tool
 import data
 from clear import clear_terminal
 import time
@@ -12,7 +12,9 @@ def afficher_plateau(plateau):
             plateau_affichage += "-----" * 7 + "\n"
     plateau_affichage += "\n"
 
-    toolbox.display_box(titre=" ", text=plateau_affichage, center_texte=True, padding=1)
+    game_tool.display_box(
+        titre=" ", text=plateau_affichage, center_texte=True, padding=1
+    )
 
 
 def add_jeton(plateau: list, colonne: int, jeton: str):
@@ -73,7 +75,7 @@ def launch(players: list):
         jeton = "🔴" if current_player == player_1 else "🟡"
         colonne = 0
         while colonne < 1 or colonne > 7 or plateau[0][colonne - 1] != "🔘":
-            colonne = toolbox.ask_int(
+            colonne = game_tool.ask_int(
                 f"à votre tour {current_player} choissisez une colonne : ", 0
             )
         gagnant = add_jeton(plateau, colonne - 1, jeton)
@@ -81,7 +83,7 @@ def launch(players: list):
         afficher_plateau(plateau)
 
         if gagnant:
-            toolbox.display_victory(current_player, 1)
+            game_tool.display_victory(current_player, 1)
             data.add_score_point(current_player, "bonus", 1)
             time.sleep(4)
             clear_terminal()
@@ -91,6 +93,6 @@ def launch(players: list):
 
     if not gagnant:
         clear_terminal()
-        toolbox.display_box("Match nul", " personne ne gagne de point")
+        game_tool.display_box("Match nul", " personne ne gagne de point")
         time.sleep(4)
         clear_terminal()

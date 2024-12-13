@@ -1,11 +1,11 @@
-import toolbox
+import game_tool
 from clear import clear, clear_terminal, special_print
 import time
 import data
 
 
 def afficher_allumettes(allumettes):
-    toolbox.display_box(
+    game_tool.display_box(
         text=f"Nombre d'allumettes restantes : {allumettes}\n"
         + "Allumettes : \n"
         + "🔥" * allumettes,
@@ -29,7 +29,7 @@ def jeu_allumettes(players: list):
 
         choice = 0
         while choice != 1 and choice != 2 and choice != 3:
-            choice = toolbox.ask_int(
+            choice = game_tool.ask_int(
                 f"Joueur {current_player}, combien d'allumettes souhaitez-vous retirer ? (1, 2 ou 3) : ",
                 0,
             )
@@ -48,7 +48,7 @@ def jeu_allumettes(players: list):
 
         clear_terminal()
 
-    toolbox.display_victory(current_player, 3)
+    game_tool.display_victory(current_player, 3)
     data.add_score_point(current_player, "allumetes", 3)
     time.sleep(4)
     clear_terminal()

@@ -1,7 +1,7 @@
 import clear
 import data
 import time
-import toolbox
+import game_tool
 
 
 def afficher_plateau(plateau):
@@ -12,7 +12,7 @@ def afficher_plateau(plateau):
             plateau_affichage += "--- --- ---\n"
     plateau_affichage += "\n"
 
-    toolbox.display_box("plateau", plateau_affichage, center_texte=True)
+    game_tool.display_box("plateau", plateau_affichage, center_texte=True)
 
 
 def verifier_gagnant(plateau, joueur):
@@ -46,11 +46,11 @@ def morpion(players: list):
         while verif:
             ligne = 0
             while ligne != 1 and ligne != 2 and ligne != 3:
-                ligne = int(toolbox.ask_int("Entrez le numéro de ligne (1-3) : ", 0))
+                ligne = int(game_tool.ask_int("Entrez le numéro de ligne (1-3) : ", 0))
             colonne = 0
             while colonne != 1 and colonne != 2 and colonne != 3:
                 colonne = int(
-                    toolbox.ask_int("Entrez le numéro de colonne (1-3) : ", 0)
+                    game_tool.ask_int("Entrez le numéro de colonne (1-3) : ", 0)
                 )
             ligne -= 1
             colonne -= 1
@@ -63,7 +63,7 @@ def morpion(players: list):
 
         if verifier_gagnant(plateau, "X" if current_player == player_1 else "O"):
             afficher_plateau(plateau)
-            toolbox.display_victory(player_1, 1)
+            game_tool.display_victory(player_1, 1)
             data.add_score_point(current_player, "morpion", 1)
             time.sleep(4)
             clear.clear_terminal()
@@ -73,6 +73,6 @@ def morpion(players: list):
 
     if not gagnant:
         afficher_plateau(plateau)
-        toolbox.display_box("Match nul", " personne ne gagne de point")
+        game_tool.display_box("Match nul", " personne ne gagne de point")
         time.sleep(4)
         clear.clear_terminal()
