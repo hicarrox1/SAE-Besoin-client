@@ -2,8 +2,24 @@ import game_tool
 import data
 from clear import clear_terminal
 import time
+import bot
 
-def get_limite(name_player_choose: str):
+
+def get_bot_move(
+    bot_level: int, max_limit: int, greater: bool, old_move: int, number_limit: int
+) -> int:
+    bot_move: int = 0
+    match bot_level:
+        case 2:
+            bot_move = bot.middle_bot_devinette(greater, old_move, number_limit)
+        case 3:
+            bot_move = bot.expert_bot_devinette(greater, old_move, number_limit)
+        case 1 | _:
+            bot_move = bot.random_bot([1, max_limit])
+    return bot_move
+
+
+def get_limit(name_player_choose: str):
     """
     Permet à un joueur de choisir une limite strictement superieur à 0 pour le jeux
 
@@ -11,7 +27,7 @@ def get_limite(name_player_choose: str):
         name_player_choose (str): Le nom du joueur qui choisit le nombre.
     """
 
-    limite: int = 0
+    limit: int = 0
 
     # affiche la boite de dialogue
     game_tool.display_box(
@@ -20,47 +36,48 @@ def get_limite(name_player_choose: str):
     )
 
     # attend un choix valide
-    while limite <= 0:
-        limite = game_tool.ask_int("-> ", 0)
+    while limit <= 0:
+        limit = game_tool.ask_int("-> ", 0)
 
     clear_terminal()
 
-    return limite
+    return limit
 
-def get_nombre_choisi(name_player_choose:str):
+
+def get_chosen_number(name_player_choose: str):
     """
     Permet à un joueur de choisir un nombre entre 1 et 1000.
 
-    Affiche une boîte de dialogue demandant au joueur de sélectionner un nombre valide 
+    Affiche une boîte de dialogue demandant au joueur de sélectionner un nombre valide
     et s'assure que la valeur choisie est comprise dans l'intervalle accepté.
 
     Arguments:
         name_player_choose (str): Le nom du joueur qui choisit le nombre.
     """
-    number_choose: int = 0
+    chosen_number: int = 0
 
-    limite: int = get_limite(name_player_choose)
+    limit: int = get_limit(name_player_choose)
 
     # affiche la boite de dialogue
     game_tool.display_box(
-        text=f"{name_player_choose} veuillez choisir un nombre entre 1 et {limite} ? ",
+        text=f"{name_player_choose} veuillez choisir un nombre entre 1 et {limit} ? ",
         center_texte=True,
     )
 
     # attend un choix valide
-    while number_choose < 1 or number_choose > limite:
-        number_choose = game_tool.ask_int("-> ", 0)
+    while chosen_number < 1 or chosen_number > limit:
+        chosen_number = game_tool.ask_int("-> ", 0)
 
     clear_terminal()
 
-    return number_choose
+    return chosen_number
 
 
-def deviner_nombre(number_choose: int, name_player_guess: str) -> int:
+def guess_number(number_choose: int, name_player_guess: str) -> int:
     """
     Permet à un joueur de deviner un nombre donné.
 
-    Le joueur entre des propositions jusqu'à trouver la bonne réponse. À chaque tentative, 
+    Le joueur entre des propositions jusqu'à trouver la bonne réponse. À chaque tentative,
     un message indique si le nombre proposé est trop grand, trop petit, ou correct.
 
     Arguments :
@@ -101,7 +118,7 @@ def deviner_nombre(number_choose: int, name_player_guess: str) -> int:
                 )
                 time.sleep(2)
                 clear_terminal()
-                
+
             # sinon teste si plus grand ou plus pettit et affiche la boite corespondante
             elif number_test < number_choose:
                 game_tool.display_box(
@@ -122,8 +139,8 @@ def launch(players: list):
     """
     Lance une partie de devinette entre deux joueurs.
 
-    Chaque joueur choisit un nombre à faire deviner à son adversaire. 
-    Le joueur ayant deviné le nombre en moins de tentatives remporte la partie. 
+    Chaque joueur choisit un nombre à faire deviner à son adversaire.
+    Le joueur ayant deviné le nombre en moins de tentatives remporte la partie.
     En cas d'égalité, le résultat est un match nul.
 
     Arguments:
@@ -136,17 +153,17 @@ def launch(players: list):
     player_1_cmpt: int = 0
     player_2_cmpt: int = 0
 
-    nombre_a_deviner: int
+    number_to_guess: int
 
     name_player_win: str
 
     # c'est au premier joueur de choisir un nombre et une limite puis a l'autre de devniner
-    nombre_a_deviner = get_nombre_choisi(player_2)
-    player_1_cmpt = deviner_nombre(nombre_a_deviner, player_1)
+    number_to_guess = get_chosen_number(player_2)
+    player_1_cmpt = guess_number(number_to_guess, player_1)
 
     # et les roles s'inverse
-    nombre_a_deviner = get_nombre_choisi(player_1)
-    player_2_cmpt = deviner_nombre(nombre_a_deviner, player_2)
+    number_to_guess = get_chosen_number(player_1)
+    player_2_cmpt = guess_number(number_to_guess, player_2)
 
     if player_1_cmpt < player_2_cmpt:
         name_player_win = player_1

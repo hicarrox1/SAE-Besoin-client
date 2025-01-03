@@ -34,7 +34,7 @@ def game():
             case 1:
                 game_tool.launch_game("devinette", jeux_devinette.launch)
             case 2:
-                game_tool.launch_game("allumetes", jeux_alumette.jeu_allumettes)
+                game_tool.launch_game("allumetes", jeux_alumette.matche_game)
             case 3:
                 game_tool.launch_game("morpion", jeux_morpion.morpion)
             case 4:

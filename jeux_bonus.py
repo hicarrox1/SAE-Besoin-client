@@ -4,31 +4,29 @@ from clear import clear_terminal
 import time
 
 
-def afficher_plateau(plateau: list):
+def display_board(board: list):
     """
     Affiche l'état actuel du plateau de jeu.
 
-    Le plateau est une grille 6x7 où chaque emplacement peut être vide ("🔘") 
+    Le plateau est une grille 6x7 où chaque emplacement peut être vide ("🔘")
     ou occupé par un jeton ("🔴" ou "🟡"). La méthode formate et affiche la grille.
 
     Arguments:
-        plateau (list): Une liste 2D représentant le plateau de jeu.
+        board (list): Une liste 2D représentant le plateau de jeu.
     """
-    plateau_affichage: str = ""
+    board_display: str = ""
     # Boucle pour formater l'affichage du plateau
-    for i in range(len(plateau)):
-        plateau_affichage += " | ".join(plateau[i]) + "\n"
-        if i != len(plateau) - 1:
-            plateau_affichage += "-----" * 7 + "\n"
-    plateau_affichage += "\n"
+    for i in range(len(board)):
+        board_display += " | ".join(board[i]) + "\n"
+        if i != len(board) - 1:
+            board_display += "-----" * 7 + "\n"
+    board_display += "\n"
 
     # Affichage du plateau dans une boîte centrée
-    game_tool.display_box(
-        titre=" ", text=plateau_affichage, center_texte=True, padding=1
-    )
+    game_tool.display_box(titre=" ", text=board_display, center_texte=True, padding=1)
 
 
-def add_jeton(plateau: list, colonne: int, jeton: str) -> bool:
+def add_token(board: list, column: int, token: str) -> bool:
     """
     Ajoute un jeton dans une colonne donnée.
 
@@ -36,68 +34,68 @@ def add_jeton(plateau: list, colonne: int, jeton: str) -> bool:
     La fonction vérifie si ce mouvement permet de gagner la partie.
 
     Arguments:
-        plateau (list): Une liste 2D représentant le plateau de jeu.
-        colonne (int): L'indice de la colonne (0-indexée) où insérer le jeton.
+        board (list): Une liste 2D représentant le plateau de jeu.
+        column (int): L'indice de la colonne (0-indexée) où insérer le jeton.
         jeton (str): Le symbole du joueur ("🔴" ou "🟡").
 
     Retourne:
         bool: True si le joueur a gagné après ce coup, False sinon.
     """
-    ligne: int
+    row: int
     # Recherche de la première ligne vide dans la colonne
-    for i in range(len(plateau)):
-        if plateau[i][colonne] == "🔘":
-            ligne = i
+    for i in range(len(board)):
+        if board[i][column] == "🔘":
+            row = i
     # Placement du jeton à la position trouvée
-    plateau[ligne][colonne] = jeton
+    board[row][column] = token
 
     ## Vérifie si le joueur a gagné après ce coup
-    return check_if_win(plateau, jeton, [ligne, colonne])
+    return check_if_win(board, token, [row, column])
 
 
-def check_if_win(plateau: list, jeton: str, pos: list) -> bool:
+def check_if_win(board: list, token: str, token_position: list) -> bool:
     """
     Vérifie si un joueur a gagné la partie.
 
     Analyse les directions (horizontale, verticale, et diagonales) pour détecter une série de 4 jetons alignés.
 
     Arguments:
-        plateau (list): Une liste 2D représentant le plateau de jeu.
-        jeton (str): Le symbole du joueur à vérifier ("🔴" ou "🟡").
+        board (list): Une liste 2D représentant le plateau de jeu.
+        token (str): Le symbole du joueur à vérifier ("🔴" ou "🟡").
         pos (list): La position [ligne, colonne] où le dernier jeton a été ajouté.
 
     Retourne:
         bool: True si le joueur a une ligne de 4 jetons ou plus, False sinon.
     """
     win: bool = False
-    total_voisins: int = 1
+    total_neighbors: int = 1
     directions: list = [
-        [(0, 1), (0, -1)], # Vérification horizontale
-        [(1, 0), (-1, 0)], # Vérification verticale
-        [(1, 1), (-1, -1)], # Vérification diagonale montante
-        [(1, -1), (-1, 1)], # Vérification diagonale descendante    
+        [(0, 1), (0, -1)],  # Vérification horizontale
+        [(1, 0), (-1, 0)],  # Vérification verticale
+        [(1, 1), (-1, -1)],  # Vérification diagonale montante
+        [(1, -1), (-1, 1)],  # Vérification diagonale descendante
     ]
     current_pos: list
 
     # Vérification dans toutes les directions possibles
     for direction in directions:
         for dx, dy in direction:
-            current_pos = [pos[0], pos[1]]
+            current_pos = [token_position[0], token_position[1]]
             try:
                 # Exploration dans la direction actuelle
                 while (
-                    plateau[current_pos[0] + dx][current_pos[1] + dy] == jeton
+                    board[current_pos[0] + dx][current_pos[1] + dy] == token
                     and (current_pos[0] + dx) >= 0
                     and (current_pos[1] + dy) >= 0
                 ):
-                    total_voisins += 1
+                    total_neighbors += 1
                     current_pos[0] = current_pos[0] + dx
                     current_pos[1] = current_pos[1] + dy
             except:
                 pass
-        if total_voisins >= 4:
+        if total_neighbors >= 4:
             win = True
-        total_voisins = 1
+        total_neighbors = 1
 
     return win
 
@@ -115,36 +113,36 @@ def launch(players: list):
     player_1: str = players[0]
     player_2: str = players[1]
     current_player: str = player_1
-    numero_tour: int = 0
-    gagnant: bool = False
-    jeton: str
-    colonne: int
+    round_number: int = 0
+    winner: bool = False
+    token: str
+    column: int
 
     # Initialisation du plateau avec des emplacements vides
-    plateau: list = [["🔘" for _ in range(7)] for _ in range(6)]
-    afficher_plateau(plateau)
+    board: list = [["🔘" for _ in range(7)] for _ in range(6)]
+    display_board(board)
 
     # Boucle principale du jeu
-    while numero_tour <= 42 and not gagnant:
-        numero_tour += 1
-        jeton = "🔴" if current_player == player_1 else "🟡"
-        colonne = 0
+    while round_number <= 42 and not winner:
+        round_number += 1
+        token = "🔴" if current_player == player_1 else "🟡"
+        column = 0
 
         # Demande de la colonne pour placer le jeton, vérifie sa validité
-        while colonne < 1 or colonne > 7 or plateau[0][colonne - 1] != "🔘":
-            colonne = game_tool.ask_int(
+        while column < 1 or column > 7 or board[0][column - 1] != "🔘":
+            column = game_tool.ask_int(
                 f"à votre tour {current_player} choissisez une colonne : ", 0
             )
 
         # Ajout du jeton et vérification de la victoire
-        gagnant = add_jeton(plateau, colonne - 1, jeton)
+        winner = add_token(board, column - 1, token)
 
         # Efface l'écran et affiche le plateau après le coup
         clear_terminal()
-        afficher_plateau(plateau)
+        display_board(board)
 
         # Si un joueur gagne, affiche un message de victoire
-        if gagnant:
+        if winner:
             game_tool.display_victory(current_player, 1)
             data.add_score_point(current_player, "bonus", 1)
             time.sleep(4)
@@ -155,7 +153,7 @@ def launch(players: list):
             current_player = player_2 if current_player == player_1 else player_1
 
     # Si la partie se termine sans gagnant, affiche un message de match nul
-    if not gagnant:
+    if not winner:
         clear_terminal()
         game_tool.display_box("Match nul", " personne ne gagne de point")
         time.sleep(4)
