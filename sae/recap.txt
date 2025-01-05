@@ -1,4 +1,4 @@
--linux -> faire les code  + compte rendu
+-linux -> faire les code(60%)  + compte rendu
 -sql -> attendre cours 
 -programation -> faire code(50%) + compte rendu
 -exposé intervenant -> completer diapo

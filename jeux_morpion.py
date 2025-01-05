@@ -3,18 +3,53 @@ import data
 import time
 import game_tool
 import bot
-
+import random
 
 def get_bot_move(bot_level: int, board: list, current_token: str) -> list[int]:
     bot_move: list[int] = [0, 0]
     match bot_level:
         case 2:
-            pass
+            if (random.randint(1, 2)) == 2:
+                bot_move = [bot.random_bot([1, 3]), bot.random_bot([1, 3])]
+            else:
+                bot_move=best_move(board, current_token)
         case 3:
-            pass
+            bot_move=best_move(board, current_token)
         case 1 | _:
             bot_move = [bot.random_bot([1, 3]), bot.random_bot([1, 3])]
     return bot_move
+
+
+def best_move(board: list, token: str) -> list[int]:
+    # Définit l'adversaire
+    adversaire = "X" if token == "O" else "O"
+
+    # Parcourt toutes les cases pour trouver le meilleur coup
+    for row in range(3):
+        for col in range(3):
+            if board[row][col] == " ":
+                # Simule un coup pour le joueur
+                if check_win(board, token, row, col):
+                    return [row, col]
+
+    # Bloquer un coup gagnant de l'adversaire
+    for row in range(3):
+        for col in range(3):
+            if board[row][col] == " ":
+                if check_win(board, adversaire, row, col):
+                    return [row, col]
+
+    possible = []
+
+    # Si aucun coup gagnant ou de blocage, choisir une case libre
+    for row in range(3):
+        for col in range(3):
+            if board[row][col] == " ":
+                possible.append([row, col])
+
+    if len(possible) >= 1:
+        return possible[random.randint(0, len(possible) - 1)]
+    return None  # Aucun coup possible (le plateau est plein)
 
 
 def display_board(board: list):
@@ -38,8 +73,16 @@ def display_board(board: list):
     # Affichage du plateau dans une boîte centrée
     game_tool.display_box("plateau", plateau_affichage, center_texte=True)
 
+def play(board: list, token: str, row: int, column:int) -> bool:
+    
+    win = check_win(board, token, row, column)
 
-def check_win(board: list, token: str) -> bool:
+    board[row][column] = token
+
+    return win
+
+
+def check_win(board: list, token: str, row: int, column: int) -> bool:
     """
     Vérifie si un joueur a gagné la partie.
 
@@ -54,16 +97,19 @@ def check_win(board: list, token: str) -> bool:
     """
     # Vérification des lignes et colonnes
     win: bool = False
-    for i in range(3):
-        if board[i][0] == board[i][1] == board[i][2] == token:
-            win = True
-        if board[0][i] == board[1][i] == board[2][i] == token:
-            win = True
+    
+    if ((board[row][0] == token) or column == 0) and  ((board[row][1] == token) or column == 1)  and ((board[row][2] == token) or column == 2): 
+        win = True
+    if ((board[0][column] == token) or row == 0) and ((board[1][column] == token) or row == 1) and ((board[2][column] == token) or row == 2):
+        win = True
+
     # Vérification des diagonales
-    if board[0][0] == board[1][1] == board[2][2] == token:
-        win = True
-    if board[0][2] == board[1][1] == board[2][0] == token:
-        win = True
+    if (row,column) in [(1,1),(0,0),(2,2)]:
+        if ((board[0][0] == token) or (column == 0 and row == 0)) and ((board[1][1] == token) or (column == 1 and row == 1)) and ((board[2][2] == token) or (column == 2 and row == 2)):
+            win = True
+    if (row,column) in [(0,2),(1,1),(2,0)]:
+        if ((board[0][2] == token) or (column == 2 and row == 0)) and ((board[1][1] == token) or (column == 1 and row == 1)) and ((board[2][0] == token) or (column == 0 and row == 2)):
+            win = True
     return win
 
 
@@ -112,11 +158,10 @@ def morpion(players: list):
                 clear.clear_terminal()
                 input_check = False
 
-        # Mise à jour du plateau
-        board[row][column] = "X" if current_player == player_1 else "O"
+        win = play(board,"X" if current_player == player_1 else "O", row, column)
 
         # Vérification de la victoire
-        if check_win(board, "X" if current_player == player_1 else "O"):
+        if win:
             display_board(board)
             game_tool.display_victory(player_1, 1)
             data.add_score_point(current_player, "morpion", 1)

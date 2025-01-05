@@ -2,7 +2,43 @@ import game_tool
 import data
 from clear import clear_terminal
 import time
+import random
+import bot
 
+def get_bot_move(bot_level: int, board: list, current_token: str) -> list[int]:
+    bot_move: list[int] = 1
+    match bot_level:
+        case 2:
+            if (random.randint(1, 2)) == 2:
+                bot_move = bot.random_bot([1, 7])
+            else:
+                bot_move=best_move(board,current_token)
+        case 3:
+            bot_move=best_move(board,current_token)
+        case 1 | _:
+            bot_move = bot.random_bot([1, 7])
+    return bot_move
+
+def best_move(board: list, token: str) -> list[int]:
+    # Définit l'adversaire
+    adversaire = "🔴" if token == "🟡" else "🟡"
+
+    token_positions: list =[]
+    for col in range(7):
+        for i in range(len(board)):
+            if board[i][col] == "🔘":
+                row = i
+        token_positions.append([row,col])
+    
+    for token_position in token_positions:
+        if check_if_win(board,token,token_position):
+            return token_position
+        
+    for token_position in token_positions:
+        if check_if_win(board,adversaire,token_position):
+            return token_position
+        
+    return token_positions[random.randint(0,6)]
 
 def display_board(board: list):
     """
