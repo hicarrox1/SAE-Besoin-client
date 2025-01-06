@@ -4,6 +4,7 @@ import time
 import data
 import bot
 import random
+from PlayerInfo import PlayerInfo
 
 
 def get_bot_move(bot_level: int, matche_count: int) -> int:
@@ -38,7 +39,7 @@ def display_game(matche_count: int):
     )
 
 
-def matche_game(players: list):
+def matche_game(players: list[PlayerInfo]):
     """
     Gère le déroulement du jeu des allumettes entre deux joueurs.
 

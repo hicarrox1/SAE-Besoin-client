@@ -1,19 +1,26 @@
 import game_tool
 import data
-from clear import clear_terminal
+from clear import clear_terminal, special_print
 import time
 import bot
-
+from PlayerInfo import PlayerInfo
+import random
 
 def get_bot_move(
-    bot_level: int, max_limit: int, greater: bool, old_move: int, number_limit: int
+    bot_level: int, max_limit: int, greater: bool, old_move: int, number_limit: list[int], first: bool
 ) -> int:
     bot_move: int = 0
     match bot_level:
         case 2:
-            bot_move = bot.middle_bot_devinette(greater, old_move, number_limit)
+            if first:
+                return bot.random_bot([1, max_limit])
+            else:
+                bot_move = bot.middle_bot_devinette(greater, old_move, number_limit)
         case 3:
-            bot_move = bot.expert_bot_devinette(greater, old_move, number_limit)
+            if first:
+                return bot.random_bot([1, max_limit])
+            else:
+                bot_move = bot.expert_bot_devinette(greater, old_move, number_limit)
         case 1 | _:
             bot_move = bot.random_bot([1, max_limit])
     return bot_move
@@ -44,7 +51,7 @@ def get_limit(name_player_choose: str):
     return limit
 
 
-def get_chosen_number(name_player_choose: str):
+def get_chosen_number(name_player_choose: str) -> list[int]:
     """
     Permet à un joueur de choisir un nombre entre 1 et 1000.
 
@@ -70,10 +77,10 @@ def get_chosen_number(name_player_choose: str):
 
     clear_terminal()
 
-    return chosen_number
+    return chosen_number,limit
 
 
-def guess_number(number_choose: int, name_player_guess: str) -> int:
+def guess_number(number_choose: int, player_info: PlayerInfo, limit: int) -> int:
     """
     Permet à un joueur de deviner un nombre donné.
 
@@ -87,20 +94,38 @@ def guess_number(number_choose: int, name_player_guess: str) -> int:
     Retourne :
         int: Le nombre de tentatives nécessaires pour deviner le nombre.
     """
-    number_test: int = None
+    number_test: int = 0
     cmpt_try: int = 0
+    player_name: str= player_info.pseudo
+    greater: bool = False
+
+    first: bool = True
+
+    if greater:
+        borne: list = [1,number_test]
+    else:
+        borne: list = [number_test,limit-1]
 
     # affiche une boite de dialogue qui apairait au debut quand aucune proposition n'a etait faite
     game_tool.display_box(
-        text=f"nombre d'essai: {cmpt_try} \n---------------------------",
+        text=f"limite: {limit}\nnombre d'essai: {cmpt_try} \n---------------------------",
         center_texte=True,
     )
+
+    if player_info.is_bot:
+        special_print(f"{player_name} a choisi : ...")
 
     # tant que le nombre que donne le joueur et diferent du nombre à trouver
     while number_test != number_choose:
         # demande un nombre
-        number_test = game_tool.ask_int(
-            f"{name_player_guess}, devinez le nombre : ", None
+
+        if player_info.is_bot:
+            number_test = get_bot_move(player_info.bot_level, limit-1, greater, number_test, borne, first)
+            first = False
+            time.sleep(1.5)
+        else:
+            number_test = game_tool.ask_int(
+            f"{player_name}, devinez le nombre : ", None
         )
         # si le nombre est valide alors
         if number_test is not None and number_test >= 0 and number_test <= 1000:
@@ -112,7 +137,7 @@ def guess_number(number_choose: int, name_player_guess: str) -> int:
             # regarder si le nombre est le bon est affiche donc une boite de victoire avec le nombre d'essai
             if number_test == number_choose:
                 game_tool.display_box(
-                    text=f"Bravo {name_player_guess} vous avez trouvé en : {cmpt_try} essai",
+                    text=f"Bravo {player_name} vous avez trouvé en : {cmpt_try} essai",
                     center_texte=True,
                     padding=2,
                 )
@@ -121,21 +146,31 @@ def guess_number(number_choose: int, name_player_guess: str) -> int:
 
             # sinon teste si plus grand ou plus pettit et affiche la boite corespondante
             elif number_test < number_choose:
+                if number_test > borne[0]:
+                    borne[0] = number_test
                 game_tool.display_box(
-                    text=f"nombre d'essai: {cmpt_try} \nTrop petit ↘",
+                    text=f"limite: {limit}\nnombre d'essai: {cmpt_try} \nTrop petit ↘",
                     center_texte=True,
                     icon="↘️",
                 )
+                greater=False
             else:
+                if number_test < borne[1]:
+                    borne[1] = number_test
                 game_tool.display_box(
-                    text=f"nombre d'essai: {cmpt_try} \nTrop grand ↗",
+                    text=f"limite: {limit}\nnombre d'essai: {cmpt_try} \nTrop grand ↗",
                     center_texte=True,
                     icon="↗️",
                 )
+                greater=True
+
+            if player_info.is_bot:
+                special_print(f"{player_name} a choisi : {number_test}")
+
     return cmpt_try
 
 
-def launch(players: list):
+def launch(players: list[PlayerInfo]):
     """
     Lance une partie de devinette entre deux joueurs.
 
@@ -147,37 +182,54 @@ def launch(players: list):
         players (list): Une liste contenant les noms des deux joueurs.
         Le premier joueur dans la liste commence la partie.
     """
-    player_1: str = players[0]
-    player_2: str = players[1]
+    player_1: PlayerInfo = players[0]
+    player_2: PlayerInfo = players[1]
 
     player_1_cmpt: int = 0
     player_2_cmpt: int = 0
 
     number_to_guess: int
+    limit:int
+    chosen_number: list[int] = []
 
-    name_player_win: str
+    player_win: PlayerInfo
 
     # c'est au premier joueur de choisir un nombre et une limite puis a l'autre de devniner
-    number_to_guess = get_chosen_number(player_2)
-    player_1_cmpt = guess_number(number_to_guess, player_1)
+    if player_2.is_bot:
+        number_to_guess = bot.random_bot([1, 1000])
+        limit = 1000
+    else:
+        chosen_number = get_chosen_number(player_2.pseudo)
+        number_to_guess = chosen_number[0]
+        limit = number_to_guess[1]
+    player_1_cmpt = guess_number(number_to_guess, player_1, limit)
 
     # et les roles s'inverse
-    number_to_guess = get_chosen_number(player_1)
-    player_2_cmpt = guess_number(number_to_guess, player_2)
+    if player_1.is_bot:
+        number_to_guess = bot.random_bot([1, 1000])
+        limit = 1000
+    else:
+        chosen_number = get_chosen_number(player_1.pseudo)
+        number_to_guess = chosen_number[0]
+        limit = number_to_guess[1]
+    player_2_cmpt = guess_number(number_to_guess, player_2, limit)
 
     if player_1_cmpt < player_2_cmpt:
-        name_player_win = player_1
+        player_win = player_1
     else:
-        name_player_win = player_2
+        player_win = player_2
 
     # si les deux utilisateurs on autant d'essai chacun
     if player_1_cmpt == player_2_cmpt:
         game_tool.display_box("Match nul", " personne ne gagne de point")
     else:
-        game_tool.display_victory(name_player_win, 1)
+        game_tool.display_victory(player_win.pseudo, 1)
         # rajoute un point à l'utilisateur qui à gagné
-        data.add_score_point(name_player_win, "devinette", 1)
+        if player_win.is_bot == False:
+            data.add_score_point(player_win.pseudo, "devinette", 1)
 
     # tout effacer aprés 2s
     time.sleep(2)
     clear_terminal()
+
+

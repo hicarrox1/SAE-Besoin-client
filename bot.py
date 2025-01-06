@@ -2,10 +2,10 @@ from random import randint
 
 
 def random_bot(limit: list) -> int:
+
     assert limit[0] < limit[1], "wrong limit"
 
     return randint(limit[0], limit[1])
-
 
 def expert_bot_alumette(matche_count: int) -> int:
     best_option: int
@@ -24,21 +24,21 @@ def expert_bot_alumette(matche_count: int) -> int:
     return best_option
 
 
-def middle_bot_devinette(greater: bool, old_move: int, number_limit: int):
+def middle_bot_devinette(greater: bool, old_move: int, number_limit: list):
     bot_move: int = 0
     if greater:
-        bot_move = random_bot([old_move, number_limit[1]])
-    else:
         bot_move = random_bot([number_limit[0], old_move])
+    else:
+        bot_move = random_bot([old_move, number_limit[1]])
     return bot_move
 
 
 def expert_bot_devinette(greater: bool, old_move: int, number_limit: int):
     bot_move: int = 0
-
+    
     if greater:
-        bot_move = int((old_move + number_limit[1]) / 2)
-    else:
         bot_move = int((old_move + number_limit[0]) / 2)
-
+    else:
+        bot_move = int((old_move + number_limit[1]) / 2)
+    
     return bot_move

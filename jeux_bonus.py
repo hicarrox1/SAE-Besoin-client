@@ -4,6 +4,7 @@ from clear import clear_terminal
 import time
 import random
 import bot
+from PlayerInfo import PlayerInfo
 
 def get_bot_move(bot_level: int, board: list, current_token: str) -> list[int]:
     bot_move: list[int] = 1
@@ -136,7 +137,7 @@ def check_if_win(board: list, token: str, token_position: list) -> bool:
     return win
 
 
-def launch(players: list):
+def launch(players: list[PlayerInfo]):
     """
     Lance une partie de Puissance 4 entre deux joueurs.
 

@@ -13,7 +13,7 @@ from display_tool import (
 )
 from menu_score import display_best_player
 from input_tool import ask_int, ask_str
-
+from PlayerInfo import PlayerInfo
 
 # Outil du jeux
 
@@ -92,7 +92,7 @@ def launch_game(game_name: str, function):
     )
 
     # afiche un filler pendant 5s qui aura 36 case qui vont se remplir au fur a mesure des 5s avec sur le coté l'icon du jeux
-    filler_animation_tool.slider(10, 36, game_data[2], "▪️", "▫️")
+    filler_animation_tool.slider(5, 36, game_data[2], "▪️", "▫️")
     # efface l'ecran aprés la fin du filler de 5s avec la taille de la presentation et celle du filler
     clear(1)
     clear_terminal()
@@ -124,54 +124,96 @@ def who_played() -> list:
     Retourne :
         list: Liste contenant les pseudos des deux joueurs.
     """
-    # Initialisation des noms de joueurs et variables de contrôle
-    player_1_name: str = "..."
-    player_2_name: str = "..."
-    pseudo: str = ""
-    choice: int = 0
-    start: bool = False
-
     # Boucle principale jusqu'à ce que les deux joueurs soient enregistrés et que le jeu commence
-    while player_1_name == "..." or player_2_name == "..." or not start:
-        choice = 0
-        pseudo = ""
-        display_box(
-            "quelle sont vos pseudo",
-            f"1. {player_1_name} 2. {player_2_name}\n3. Start",
-            center_texte=True,
-        )
-
-        # Attente d'un choix valide (1, 2 ou 3)
-        while choice != 1 and choice != 2 and choice != 3:
-            choice = ask_int("Votre choix : ", 0)
-
-        # Si choix == 3 et que les deux pseudos sont valides, on peut commencer
-        if choice == 3 and player_1_name != "..." and player_2_name != "...":
-            start = True
-        # Sinon, permet de modifier le pseudo d'un joueur
-        elif choice == 1 or choice == 2:
-            while pseudo == "":
-                pseudo = ask_str("quelle est votre pseudo: ", "")
-                # Vérification des contraintes sur le pseudo
-                if (
-                    len(pseudo) >= 14
-                    or len(pseudo) <= 2
-                    or (choice == 1 and pseudo == player_2_name)
-                    or (choice == 2 and pseudo == player_1_name)
-                ):
-                    pseudo = ""
-            # Assigne le pseudo au joueur correspondant
-            if choice == 1:
-                player_1_name = pseudo
-            else:
-                player_2_name = pseudo
-        clear_terminal()
+    player1_info = who_play2(1)
+    player2_info = who_play2(2)
 
     # Ajoute les joueurs à la base de données s'ils n'existent pas encore
-    if data.get_player_id(player_1_name) == -1:
-        data.add_player(player_1_name, "🌵")
+    if player1_info.is_bot == False:
+        if data.get_player_id(player1_info.pseudo) == -1:
+            data.add_player(player1_info.pseudo, "🌵")
 
-    if data.get_player_id(player_2_name) == -1:
-        data.add_player(player_2_name, "🌵")
+    if player2_info.is_bot == False:
+        if data.get_player_id(player2_info.pseudo) == -1:
+            data.add_player(player2_info.pseudo, "🌵")
 
-    return [player_1_name, player_2_name]
+    return [player1_info, player2_info]
+
+def who_play2(player_number: int) -> PlayerInfo:
+    """     
+    Permet aux joueurs de s'identifier.
+
+    Arguments :
+        player_number (int): Numéro du joueur en cours (1 ou 2).
+    
+    Retourne : 
+        PlayerInfo: Informations du joueur.
+
+    """
+
+    # Initialisation des noms de joueurs et variables de contrôle
+    pseudo: str = "..."
+    choice: int = 0
+
+    bot: bool = False
+    bot_level: int = 0
+
+    titre= "Player 1" if player_number == 1 else "Player 2"
+
+    # Boucle principale jusqu'à ce que les deux joueurs soient enregistrés et que le jeu commence
+    
+    choice = 0
+    pseudo = ""
+    display_box(
+        f"{titre}",
+        f"1. Player 2. Bot   \n3.Start",
+        center_texte=True,
+    )
+
+    # Attente d'un choix valide (1, 2)
+    while choice != 1 and choice != 2:
+        choice = ask_int("Votre choix : ", 0)
+
+    if choice == 1:
+        while pseudo == "":
+            bot = False
+            pseudo = ask_str("quelle est votre pseudo: ", "")
+            # Vérification des contraintes sur le pseudo
+            if len(pseudo) >= 14 or len(pseudo) <= 2 or pseudo == "":
+                pseudo = ""
+        clear_terminal()
+
+    elif choice == 2:
+        bot = True
+
+        clear_terminal()
+
+        bot_level = get_bot_level()
+
+        pseudo = f"Bot{player_number} {"Easy" if bot_level == 1 else "Medium" if bot_level == 2 else "Hard"}"
+
+    return PlayerInfo(pseudo,bot, bot_level)
+
+
+
+def get_bot_level():
+    """
+    Permet de choisir le niveau de difficulté du bot.
+
+    Retourne :
+        int: Niveau de difficulté du bot (1, 2 ou 3).
+    """
+
+    bot_level: int = 0
+
+    display_box(
+        "Bot level",
+        "1. Easy\n2. Medium\n3. Hard",
+        center_texte=True,
+    )
+
+    while bot_level != 1 and bot_level != 2 and bot_level != 3:
+        bot_level = ask_int("Your choice : ", 0)
+    clear_terminal()
+    return bot_level
+

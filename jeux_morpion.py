@@ -4,6 +4,7 @@ import time
 import game_tool
 import bot
 import random
+from PlayerInfo import PlayerInfo
 
 def get_bot_move(bot_level: int, board: list, current_token: str) -> list[int]:
     bot_move: list[int] = [0, 0]
