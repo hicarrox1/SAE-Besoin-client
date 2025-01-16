@@ -14,6 +14,8 @@ from display_tool import (
 from menu_score import display_best_player
 from input_tool import ask_int, ask_str
 from PlayerInfo import PlayerInfo
+import animations
+import random
 
 # Outil du jeux
 
@@ -77,7 +79,7 @@ def launch_game(game_name: str, function):
         game_name (str): Nom du jeu à lancer.
         function (function): Fonction principale du jeu à exécuter.
     """
-    players: list = []
+    players: list[PlayerInfo] = []
     choice: int = 1
 
     # recupere les data du jeux lancer
@@ -100,7 +102,7 @@ def launch_game(game_name: str, function):
     # lance la fonction de {jeux}
 
     # demande qui joue
-    players = who_played()
+    players = [who_play(1), who_play(2)]
 
     # affiche le meilleur joueur du jeux
     display_best_player(game_name)
@@ -109,6 +111,7 @@ def launch_game(game_name: str, function):
 
     # lance le jeux puis demande lorsque le jeux et finis si ils veuleut rejouer
     while choice == 1:
+        animations.start_game_animation(players[0].icon, players[1].icon)
         function(players)
 
         # lorsque sort du jeux
@@ -117,36 +120,14 @@ def launch_game(game_name: str, function):
         clear_terminal()
 
 
-def who_played() -> list:
+def who_play(player_number: int) -> PlayerInfo:
     """
-    Permet aux joueurs de s'identifier.
-
-    Retourne :
-        list: Liste contenant les pseudos des deux joueurs.
-    """
-    # Boucle principale jusqu'à ce que les deux joueurs soient enregistrés et que le jeu commence
-    player1_info = who_play2(1)
-    player2_info = who_play2(2)
-
-    # Ajoute les joueurs à la base de données s'ils n'existent pas encore
-    if player1_info.is_bot == False:
-        if data.get_player_id(player1_info.pseudo) == -1:
-            data.add_player(player1_info.pseudo, "🌵")
-
-    if player2_info.is_bot == False:
-        if data.get_player_id(player2_info.pseudo) == -1:
-            data.add_player(player2_info.pseudo, "🌵")
-
-    return [player1_info, player2_info]
-
-def who_play2(player_number: int) -> PlayerInfo:
-    """     
     Permet aux joueurs de s'identifier.
 
     Arguments :
         player_number (int): Numéro du joueur en cours (1 ou 2).
-    
-    Retourne : 
+
+    Retourne :
         PlayerInfo: Informations du joueur.
 
     """
@@ -154,19 +135,22 @@ def who_play2(player_number: int) -> PlayerInfo:
     # Initialisation des noms de joueurs et variables de contrôle
     pseudo: str = "..."
     choice: int = 0
+    icon: str = "🌵"
 
     bot: bool = False
     bot_level: int = 0
 
-    titre= "Player 1" if player_number == 1 else "Player 2"
+    level_name: str
+
+    titre = "Player 1" if player_number == 1 else "Player 2"
 
     # Boucle principale jusqu'à ce que les deux joueurs soient enregistrés et que le jeu commence
-    
+
     choice = 0
     pseudo = ""
     display_box(
         f"{titre}",
-        f"1. Player 2. Bot   \n3.Start",
+        "1. Player 2. Bot",
         center_texte=True,
     )
 
@@ -175,25 +159,35 @@ def who_play2(player_number: int) -> PlayerInfo:
         choice = ask_int("Votre choix : ", 0)
 
     if choice == 1:
+        # Si le joueur est un humain on lui demande son pseudo
         while pseudo == "":
             bot = False
-            pseudo = ask_str("quelle est votre pseudo: ", "")
-            # Vérification des contraintes sur le pseudo
-            if len(pseudo) >= 14 or len(pseudo) <= 2 or pseudo == "":
-                pseudo = ""
+            clear_terminal()
+            pseudo = ask_pseudo()
         clear_terminal()
 
     elif choice == 2:
-        bot = True
-
+        # Si le joueur choisit de jouer contre un bot
         clear_terminal()
 
+        bot = True
+        # on lui demande le niveau de difficulté
         bot_level = get_bot_level()
+        # on lui donne un nom et une icon
+        level_name = (
+            "Easy" if bot_level == 1 else "Medium" if bot_level == 2 else "Hard"
+        )
+        pseudo = f"Bot {player_number} {level_name}"
+        icon = "🤖"
 
-        pseudo = f"Bot{player_number} {"Easy" if bot_level == 1 else "Medium" if bot_level == 2 else "Hard"}"
+    # Si le joueur n'existe pas, on l'ajoute à la base de données
+    if not bot and data.get_player_id(pseudo) == -1:
+        data.add_player(pseudo, icon)
+    elif not bot:
+        # Si le joueur existe déjà, on récupère son icône
+        icon = data.get_player_icon(pseudo)
 
-    return PlayerInfo(pseudo,bot, bot_level)
-
+    return PlayerInfo(pseudo, bot, bot_level, icon)
 
 
 def get_bot_level():
@@ -210,6 +204,7 @@ def get_bot_level():
         "Bot level",
         "1. Easy\n2. Medium\n3. Hard",
         center_texte=True,
+        icon="🤖",
     )
 
     while bot_level != 1 and bot_level != 2 and bot_level != 3:
@@ -217,3 +212,42 @@ def get_bot_level():
     clear_terminal()
     return bot_level
 
+
+def ask_pseudo():
+    """
+    Permet à un joueur de choisir son pseudo.
+
+    Retourne :
+        str: Pseudo du joueur.
+    """
+    pseudo: str = ""
+
+    # Affichage de la boîte de dialogue
+    display_box(
+        "",
+        "Veuillez saisir votre pseudo\n(entre 3 et 10 caractères)",
+        center_texte=True,
+        padding=2,
+        icon="👤",
+    )
+
+    # Lecture du pseudo
+    while len(pseudo) < 3 or len(pseudo) > 10:
+        pseudo = ask_str("-> ", "")
+
+    return pseudo
+
+
+def random_number(limit: list) -> int:
+    """
+    Génère un nombre aléatoire entre deux bornes.
+    Arguments :
+        limit (list): Liste contenant les deux bornes de l'intervalle.
+    Retourne :
+        int: Nombre aléatoire généré.
+    """
+    # Vérification des bornes
+    assert limit[0] < limit[1], "wrong limit"
+
+    # Génération du nombre aléatoire
+    return random.randint(limit[0], limit[1])

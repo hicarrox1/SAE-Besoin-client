@@ -376,6 +376,8 @@ def add_player(name: str, icon: str):
         name (str) : Le nom du joueur.
         icon (str) : L'icône du joueur.
     """
+    # Vérifie si le nom n'existe pas déjà
+    assert get_player_id(name) == -1, "Erreur le nom est deja pris"
     player_data: list = get_player_data()
     # L'index est basé sur la longueur actuelle de la liste
     player_index: int = len(player_data)
@@ -400,6 +402,23 @@ def set_player_icon(player_name: str, icon: str):
     save_player_data()
 
 
+def set_player_name(player_name: str, new_player_name: str):
+    """
+    Modifie le nom d'un joueur.
+
+    Arguments :
+        player_name (str) : Le nom du joueur.
+        new_player_name (str) : Le nouveau nom du joueur.
+
+    """
+    player_data: list = get_player_data()
+    # Vérifie si le nouveau nom n'existe pas déjà
+    assert get_player_id(new_player_name) == -1, "Erreur le nom est deja pris"
+    # Modifie le nom du joueur dans les données
+    set_data_element(player_name, 1, new_player_name, 1, player_data)
+    save_player_data()
+
+
 def add_score_point(player_name: str, game_name: str, add_point: int):
     """
     Ajoute des points au score d'un joueur dans un jeu spécifique.
@@ -419,3 +438,22 @@ def add_score_point(player_name: str, game_name: str, add_point: int):
     # Met à jour le score
     set_data_element(str(player_id), 0, str(score), game_id + 1, get_score_data())
     save_score_data()
+
+
+def get_player_score_text(player_id: int) -> str:
+    """
+    Récupère les scores d'un joueur donné.
+    et les retourne sous forme de texte.
+
+    Arguments :
+        player_id (int) : ID du joueur.
+    retourne :
+        str : Les scores du joueur.
+    """
+    # Récupération des scores du joueur
+    texte: str = ""
+    scores: list = get_player_scores(player_id)
+    for i in range(len(scores)):
+        texte += f"{get_game_name(i)} : {scores[i]}\n"
+
+    return texte

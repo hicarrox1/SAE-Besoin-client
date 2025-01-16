@@ -1,9 +1,0 @@
--linux -> faire les code(60%)  + compte rendu
--sql -> attendre cours 
--programation -> faire code(50%) + compte rendu
--exposé intervenant -> completer diapo
--besoin client  -> chat gpt
-
-3 simple 
-1 en attente
-2 chiant (compte rendu) + 1 chiant

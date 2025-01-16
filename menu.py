@@ -5,7 +5,7 @@ import jeux_devinette
 import jeux_bonus
 import jeux_alumette
 import menu_score
-import menu_icon
+import menu_profile
 
 
 def game():
@@ -18,7 +18,7 @@ def game():
     while run:
         game_tool.display_box(
             "",
-            "Choisissez ce que vous voulez faire\n1. devinette   2. allumettes\n3. morpion     4. bonus     \n5.Changer d'icon\n6. afficher les scores\n0.Quitter",
+            "Choisissez ce que vous voulez faire\n1. devinette   2. allumettes\n3. morpion     4. bonus     \n5. gerer profile\n6. afficher les scores\n0.Quitter",
             icon="🎮",
             padding=1,
             center_texte=True,
@@ -40,7 +40,7 @@ def game():
             case 4:
                 game_tool.launch_game("bonus", jeux_bonus.launch)
             case 5:
-                menu_icon.change_icon_menu()
+                menu_profile.manage_profil()
             case 6:
                 menu_score.manage_score()
             case 0:

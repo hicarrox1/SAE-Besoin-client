@@ -23,7 +23,8 @@ if __name__ == "__main__":
     # lance le menu
     menu.game()
 
-    # affiche une image de fin pendant une seconde
+    # affiche une image de fin pendant une seconde1
+
     clear.special_print(DONKEY_KONG)
     time.sleep(1)
     clear.clear_terminal()

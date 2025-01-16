@@ -3,43 +3,80 @@ import data
 from clear import clear_terminal
 import time
 import random
-import bot
 from PlayerInfo import PlayerInfo
+from game_tool import random_number
 
-def get_bot_move(bot_level: int, board: list, current_token: str) -> list[int]:
-    bot_move: list[int] = 1
-    match bot_level:
-        case 2:
-            if (random.randint(1, 2)) == 2:
-                bot_move = bot.random_bot([1, 7])
-            else:
-                bot_move=best_move(board,current_token)
-        case 3:
-            bot_move=best_move(board,current_token)
-        case 1 | _:
-            bot_move = bot.random_bot([1, 7])
-    return bot_move
 
 def best_move(board: list, token: str) -> list[int]:
-    # Définit l'adversaire
-    adversaire = "🔴" if token == "🟡" else "🟡"
+    """
+    Cette fonction analyse le plateau de jeu pour déterminer le meilleur coup à jouer.
 
-    token_positions: list =[]
+    Arguments:
+        board (list): Une liste 2D représentant le plateau de jeu.
+        token (str): Le symbole du joueur ("🔴" ou "🟡") pour lequel trouver le meilleur coup.
+    Retourne:
+        int: La colonne du meilleur coup possible
+    """
+    # Définit l'adversaire
+    adversaire: str = "🔴" if token == "🟡" else "🟡"
+    bot_move: int
+    find: bool = False
+
+    # Cherche tout les position ou le bot peut jouer
+    token_positions: list = []
     for col in range(7):
         for i in range(len(board)):
             if board[i][col] == "🔘":
                 row = i
-        token_positions.append([row,col])
-    
+        token_positions.append([row, col])
+
+    # Parcourt toutes les cases pour trouver le meilleur coup pour gagner
     for token_position in token_positions:
-        if check_if_win(board,token,token_position):
-            return token_position
-        
-    for token_position in token_positions:
-        if check_if_win(board,adversaire,token_position):
-            return token_position
-        
-    return token_positions[random.randint(0,6)]
+        if check_if_win(board, token, token_position):
+            bot_move = token_position[1] + 1
+            find = True
+
+    # Si le bot ne peut pas gagner, il bloque l'adversaire
+    if not find:
+        for token_position in token_positions:
+            if check_if_win(board, adversaire, token_position):
+                bot_move = token_position[1] + 1
+                find = True
+
+    if not find:
+        # Si aucun coup gagnant ou de blocage, choisir une case libre
+        bot_move = random_number([1, 7])
+
+    return bot_move
+
+
+def get_bot_move(bot_level: int, board: list, current_token: str) -> list[int]:
+    """
+    Détermine le coup à jouer pour le bot en fonction de son niveau de difficulté.
+
+    Arguments:
+        bot_level (int): Niveau de difficulté du bot (1, 2 ou 3).
+        board (list): Une liste 2D représentant le plateau de jeu.
+        current_token (str): Le symbole du joueur actuel ("🔴" ou "🟡").
+    Returns:
+        Int: La colonne où le bot va jouer.
+    """
+    bot_move: int = 1
+    match bot_level:
+        case 2:
+            # Le bot de niveau 2 choisit un coup aléatoire ou expert de manière aléatoire.
+            if (random.randint(1, 2)) == 2:
+                bot_move = random_number([1, 7])
+            else:
+                bot_move = best_move(board, current_token)
+        case 3:
+            # Le bot de niveau 3 choisit le meilleur coup possible.
+            bot_move = best_move(board, current_token)
+        case 1 | _:
+            # Le bot de niveau 1 choisit un coup aléatoire.
+            bot_move = random_number([1, 7])
+    return bot_move
+
 
 def display_board(board: list):
     """
@@ -147,9 +184,9 @@ def launch(players: list[PlayerInfo]):
     Arguments:
         players (list): Une liste contenant les noms des deux joueurs.
     """
-    player_1: str = players[0]
-    player_2: str = players[1]
-    current_player: str = player_1
+    player_1: PlayerInfo = players[0]
+    player_2: PlayerInfo = players[1]
+    current_player: PlayerInfo = player_1
     round_number: int = 0
     winner: bool = False
     token: str
@@ -165,11 +202,15 @@ def launch(players: list[PlayerInfo]):
         token = "🔴" if current_player == player_1 else "🟡"
         column = 0
 
-        # Demande de la colonne pour placer le jeton, vérifie sa validité
-        while column < 1 or column > 7 or board[0][column - 1] != "🔘":
-            column = game_tool.ask_int(
-                f"à votre tour {current_player} choissisez une colonne : ", 0
-            )
+        if not current_player.is_bot:
+            # Demande de la colonne pour placer le jeton, vérifie sa validité
+            while column < 1 or column > 7 or board[0][column - 1] != "🔘":
+                column = game_tool.ask_int(
+                    f"à votre tour {current_player.pseudo} choissisez une colonne : ", 0
+                )
+        else:
+            # Le bot choisit une colonne en fonction de son niveau de difficulté
+            column = get_bot_move(current_player.bot_level, board, token)
 
         # Ajout du jeton et vérification de la victoire
         winner = add_token(board, column - 1, token)
@@ -180,8 +221,9 @@ def launch(players: list[PlayerInfo]):
 
         # Si un joueur gagne, affiche un message de victoire
         if winner:
-            game_tool.display_victory(current_player, 1)
-            data.add_score_point(current_player, "bonus", 1)
+            game_tool.display_victory(current_player.pseudo, 1)
+            if not current_player.is_bot:
+                data.add_score_point(current_player.pseudo, "bonus", 1)
             time.sleep(4)
             clear_terminal()
 

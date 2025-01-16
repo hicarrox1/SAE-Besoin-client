@@ -1,4 +1,4 @@
-from input_tool import get_player, ask_int, ask_str
+from input_tool import ask_int, ask_str
 import data
 from display_tool import (
     display_box,
@@ -8,6 +8,7 @@ from display_tool import (
 )
 from clear import special_print, clear_terminal
 import time
+import game_tool
 
 
 # Fonction pour afficher le meilleur joueur d'un jeu
@@ -57,8 +58,8 @@ def display_game_ranking(id: int, n: int):
     paragraph = ""
     for i in range(n):
         player_name = data.get_player_name(ranking[i][0])
-        paragraph += f"{i+1}. {data.get_player_icon(player_name)} {player_name} avec {ranking[i][1]} point\n"
-    paragraph += f"<-Q {id+1}/4 D->"
+        paragraph += f"{i + 1}. {data.get_player_icon(player_name)} {player_name} avec {ranking[i][1]} point\n"
+    paragraph += f"<-Q {id + 1}/4 D->"
 
     # Affichage du classement dans un format centralisé
     display_paragraph(paragraph, center=True, jump_line=True)
@@ -74,10 +75,7 @@ def display_player_score(player_id: int):
         player_id (int): ID du joueur.
     """
     # Récupération des scores du joueur
-    texte: str = ""
-    scores: list = data.get_player_scores(player_id)
-    for i in range(len(scores)):
-        texte += f"{data.get_game_name(i)} : {scores[i]}\n"
+    texte: str = data.get_player_score_text(player_id)
 
     # Affichage des scores dans une boîte formatée
     display_box(text=texte, center_texte=True)
@@ -122,6 +120,7 @@ def manage_score():
     associés à un joueur spécifique.
     """
     choice: int = 0
+    player_id: int
 
     while choice == 0:
         # Affichage du menu principal
@@ -141,4 +140,11 @@ def manage_score():
         if choice == 1:
             game_ranking()
         elif choice == 2:
-            display_player_score(get_player())
+            player_id = data.get_player_id(game_tool.ask_pseudo())
+            if player_id != -1:
+                clear_terminal()
+                display_player_score(player_id)
+            else:
+                special_print("Joueur non trouvé")
+                time.sleep(2)
+                clear_terminal()

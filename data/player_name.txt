@@ -5,6 +5,8 @@
 4:sonic:🌞
 5:luigi:🌵
 6:zombie:🦖
-7:lulu:🐵
-8:lol:🦖
-9:...:🌵
+7:arthus:🍔
+8:lol:🌷
+9:milka:🌵
+10:wario:🌷
+11:dino:🦖
