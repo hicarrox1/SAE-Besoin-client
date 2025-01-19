@@ -1,7 +1,5 @@
-from clear import special_input, special_print, clear_one_line, clear_terminal
+from clear import special_input, clear_one_line, clear_terminal
 from display_tool import display_box
-import time
-import data
 
 
 # INPUT
@@ -49,3 +47,51 @@ def ask_str(question: str, default: str):
         # Si une exception survient, retourne la valeur par défaut
         clear_one_line()  # Efface la ligne de saisie dans le terminal
     return choice
+
+
+def ask_pseudo():
+    """
+    Permet à un joueur de choisir son pseudo.
+
+    Retourne :
+        str: Pseudo du joueur.
+    """
+    pseudo: str = ""
+
+    # Affichage de la boîte de dialogue
+    display_box(
+        "",
+        "Veuillez saisir votre pseudo\n(entre 3 et 10 caractères)",
+        center_texte=True,
+        padding=2,
+        icon="👤",
+    )
+
+    # Lecture du pseudo
+    while len(pseudo) < 3 or len(pseudo) > 10:
+        pseudo = ask_str("-> ", "")
+
+    return pseudo
+
+
+def get_bot_level():
+    """
+    Permet de choisir le niveau de difficulté du bot.
+
+    Retourne :
+        int: Niveau de difficulté du bot (1, 2 ou 3).
+    """
+
+    bot_level: int = 0
+
+    display_box(
+        "Bot level",
+        "1. Easy\n2. Medium\n3. Hard",
+        center_texte=True,
+        icon="🤖",
+    )
+
+    while bot_level != 1 and bot_level != 2 and bot_level != 3:
+        bot_level = ask_int("Your choice : ", 0)
+    clear_terminal()
+    return bot_level

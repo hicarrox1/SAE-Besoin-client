@@ -4,7 +4,6 @@ import time
 import data
 import random
 from PlayerInfo import PlayerInfo
-from game_tool import random_number
 
 
 def expert_bot_alumette(matche_count: int) -> int:
@@ -45,8 +44,8 @@ def get_bot_move(bot_level: int, matche_count: int) -> int:
     match bot_level:
         case 2:
             # Le bot de niveau 2 choisit un coup aléatoire ou expert de manière aléatoire.
-            if (random.randint(1, 3)) < 3:
-                bot_move = random_number([1, 3])
+            if (random.randint(1, 2)) == 1:
+                bot_move = random.randint(1, 3)
             else:
                 bot_move = expert_bot_alumette(matche_count)
         case 3:
@@ -54,7 +53,7 @@ def get_bot_move(bot_level: int, matche_count: int) -> int:
             bot_move = expert_bot_alumette(matche_count)
         case 1 | _:
             # Le bot de niveau 1 choisit un coup aléatoire.
-            bot_move = random_number([1, 3])
+            bot_move = random.randint(1, 3)
     return bot_move
 
 

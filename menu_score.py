@@ -1,4 +1,4 @@
-from input_tool import ask_int, ask_str
+from input_tool import ask_int, ask_str, ask_pseudo
 import data
 from display_tool import (
     display_box,
@@ -8,7 +8,6 @@ from display_tool import (
 )
 from clear import special_print, clear_terminal
 import time
-import game_tool
 
 
 # Fonction pour afficher le meilleur joueur d'un jeu
@@ -140,7 +139,7 @@ def manage_score():
         if choice == 1:
             game_ranking()
         elif choice == 2:
-            player_id = data.get_player_id(game_tool.ask_pseudo())
+            player_id = data.get_player_id(ask_pseudo())
             if player_id != -1:
                 clear_terminal()
                 display_player_score(player_id)

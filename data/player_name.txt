@@ -1,5 +1,5 @@
 0:val:🐵
-1:hicarrox:🐵
+1:hicarrox:🌞
 2:mario:🐙
 3:test:🌷
 4:sonic:🌞
@@ -10,3 +10,4 @@
 9:milka:🌵
 10:wario:🌷
 11:dino:🦖
+12:milio:🐵

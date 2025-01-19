@@ -12,10 +12,9 @@ from display_tool import (
     display_paragraph,
 )
 from menu_score import display_best_player
-from input_tool import ask_int, ask_str
+from input_tool import ask_int, ask_pseudo, get_bot_level
 from PlayerInfo import PlayerInfo
 import animations
-import random
 
 # Outil du jeux
 
@@ -122,7 +121,7 @@ def launch_game(game_name: str, function):
 
 def who_play(player_number: int) -> PlayerInfo:
     """
-    Permet aux joueurs de s'identifier.
+    Permet de choisir si le player est un bot ou un humain.
 
     Arguments :
         player_number (int): Numéro du joueur en cours (1 ou 2).
@@ -188,66 +187,3 @@ def who_play(player_number: int) -> PlayerInfo:
         icon = data.get_player_icon(pseudo)
 
     return PlayerInfo(pseudo, bot, bot_level, icon)
-
-
-def get_bot_level():
-    """
-    Permet de choisir le niveau de difficulté du bot.
-
-    Retourne :
-        int: Niveau de difficulté du bot (1, 2 ou 3).
-    """
-
-    bot_level: int = 0
-
-    display_box(
-        "Bot level",
-        "1. Easy\n2. Medium\n3. Hard",
-        center_texte=True,
-        icon="🤖",
-    )
-
-    while bot_level != 1 and bot_level != 2 and bot_level != 3:
-        bot_level = ask_int("Your choice : ", 0)
-    clear_terminal()
-    return bot_level
-
-
-def ask_pseudo():
-    """
-    Permet à un joueur de choisir son pseudo.
-
-    Retourne :
-        str: Pseudo du joueur.
-    """
-    pseudo: str = ""
-
-    # Affichage de la boîte de dialogue
-    display_box(
-        "",
-        "Veuillez saisir votre pseudo\n(entre 3 et 10 caractères)",
-        center_texte=True,
-        padding=2,
-        icon="👤",
-    )
-
-    # Lecture du pseudo
-    while len(pseudo) < 3 or len(pseudo) > 10:
-        pseudo = ask_str("-> ", "")
-
-    return pseudo
-
-
-def random_number(limit: list) -> int:
-    """
-    Génère un nombre aléatoire entre deux bornes.
-    Arguments :
-        limit (list): Liste contenant les deux bornes de l'intervalle.
-    Retourne :
-        int: Nombre aléatoire généré.
-    """
-    # Vérification des bornes
-    assert limit[0] < limit[1], "wrong limit"
-
-    # Génération du nombre aléatoire
-    return random.randint(limit[0], limit[1])

@@ -1,9 +1,8 @@
-from input_tool import ask_int
+from input_tool import ask_int, ask_pseudo
 import data
 from display_tool import display_box
 from clear import clear_terminal, special_print
 import time
-import game_tool
 
 
 def choose_icon() -> str:
@@ -75,7 +74,7 @@ def manage_profil():
         elif choice == 2:
             # Gestion d'un profil
             clear_terminal()
-            player_name = game_tool.ask_pseudo()
+            player_name = ask_pseudo()
             # Vérification de l'existence du joueur
             if data.get_player_id(player_name) != -1:
                 # Si le joueur existe on affiche le menu de gestion de profil
@@ -113,7 +112,7 @@ def create_profil():
 
     # Tant que le pseudo n'est pas choisi ou qu'il est déjà pris on demande au joueur de choisir un pseudo
     while pseudo == "" or data.get_player_id(pseudo) != -1:
-        pseudo = game_tool.ask_pseudo()
+        pseudo = ask_pseudo()
         if data.get_player_id(pseudo) == -1:
             clear_terminal()
         else:
@@ -169,7 +168,7 @@ def profil_menu(pseudo: str):
         if choice == 1:
             # Changement du pseudo du joueur
             clear_terminal()
-            pseudo_test = game_tool.ask_pseudo()
+            pseudo_test = ask_pseudo()
             # Vérification de la disponibilité du pseudo
             if data.get_player_id(pseudo_test) != -1:
                 special_print("Ce pseudo est déjà pris !")

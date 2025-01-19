@@ -3,7 +3,7 @@ import data
 from clear import clear_terminal, special_print
 import time
 from PlayerInfo import PlayerInfo
-from game_tool import random_number
+import random
 
 
 def middle_bot_devinette(greater: bool, old_move: int, number_limit: list):
@@ -19,10 +19,11 @@ def middle_bot_devinette(greater: bool, old_move: int, number_limit: list):
     bot_move: int = 0
     # Si le nombre à deviner est plus grand que le nombre précédent alors le bot choisit un nombre plus grand de manière aléatoire
     if greater:
-        bot_move = random_number([number_limit[0], old_move])
+        bot_move = random.randint(number_limit[0], old_move)
     else:
         # sinon il choisit un nombre plus petit de manière aléatoire
-        bot_move = random_number([old_move, number_limit[1]])
+        bot_move = random.randint(old_move, number_limit[1])
+
     return bot_move
 
 
@@ -74,17 +75,17 @@ def get_bot_move(
         case 2:
             # Si c'est le premier tour du bot alors il choisit un nombre aléatoire
             if first:
-                return random_number([1, max_limit])
+                return random.randint(1, max_limit)
             else:
                 bot_move = middle_bot_devinette(greater, old_move, number_limit)
         case 3:
             if first:
-                return random_number([1, max_limit])
+                return random.randint(1, max_limit)
             else:
                 bot_move = expert_bot_devinette(greater, old_move, number_limit)
         case 1 | _:
             # Si le bot est de niveau 1 alors il choisit un nombre aléatoire
-            bot_move = random_number([1, max_limit])
+            bot_move = random.randint(1, max_limit)
     return bot_move
 
 
@@ -258,7 +259,7 @@ def launch(players: list[PlayerInfo]):
 
     # si le joueur 2 est un bot alors il choisit un nombre aléatoire
     if player_2.is_bot:
-        number_to_guess = random_number([1, 1000])
+        number_to_guess = random.randint(1, 1000)
         limit = 1000
     else:
         # sinon le joueur choisi un nombre entre 1 et 1000
@@ -270,7 +271,7 @@ def launch(players: list[PlayerInfo]):
 
     # et les roles s'inverse
     if player_1.is_bot:
-        number_to_guess = random_number([1, 1000])
+        number_to_guess = random.randint(1, 1000)
         limit = 1000
     else:
         chosen_number = get_chosen_number(player_1.pseudo)

@@ -4,7 +4,6 @@ import time
 import game_tool
 import random
 from PlayerInfo import PlayerInfo
-from game_tool import random_number
 
 
 def best_move(board: list, token: str) -> list[int]:
@@ -73,7 +72,7 @@ def get_bot_move(bot_level: int, board: list, current_token: str) -> list[int]:
         case 2:
             # Le bot de niveau 2 a une chance sur deux de jouer un coup aléatoire
             if (random.randint(1, 2)) == 2:
-                bot_move = [random_number([0, 2]), random_number([0, 2])]
+                bot_move = [random.randint(0, 2), random.randint(0, 2)]
             else:
                 bot_move = best_move(board, current_token)
         case 3:
@@ -81,7 +80,7 @@ def get_bot_move(bot_level: int, board: list, current_token: str) -> list[int]:
             bot_move = best_move(board, current_token)
         case 1 | _:
             # Le bot de niveau 1 joue un coup aléatoire
-            bot_move = [random_number([0, 2]), random_number([0, 2])]
+            bot_move = [random.randint(0, 2), random.randint(0, 2)]
     return bot_move
 
 
